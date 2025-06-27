@@ -1,2 +1,21 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+  import { onMount } from 'svelte';
+  import { pokemons, loading, error, loadPokemons } from '../stores/pokemonStore.js';
+
+  onMount(() =>{
+    loadPokemons();
+  })
+</script>
+
+
+{#if $loading}
+  <p>Chargement...</p>
+{:else if $error}
+  <p>Erreur : {$error}</p>
+{:else}
+  <ul>
+    {#each $pokemons as pokemon}
+      <li>{pokemon.name}</li>
+    {/each}
+  </ul>
+{/if}
