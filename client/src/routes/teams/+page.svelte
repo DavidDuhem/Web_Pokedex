@@ -81,11 +81,11 @@
                   >
                     Modifier
                   </button>
-                  <button
+                  <!-- <button
                     class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
                   >
                     Configurer
-                  </button>
+                  </button> -->
                 </div>
               </td>
             </tr>
