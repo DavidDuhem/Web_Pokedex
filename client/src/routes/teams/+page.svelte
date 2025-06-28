@@ -8,6 +8,7 @@
   let teams = [...data.teams];
 
   let editingId = null;
+  let deletingId = null;
 
   let editName = "";
   let editDescription = "";
@@ -38,10 +39,18 @@
     editingId = null;
   }
 
-  async function handleDelete(id) {
+  async function startDelete(id) {
+    deletingId = id;
+  }
+  async function cancelDelete() {
+    deletingId = null;
+  }
+
+  async function saveDelete(id) {
     try {
       await service.delete(id, fetch);
       teams = teams.filter((team) => team.id !== id);
+      deletingId = null;
     } catch (err) {
       alert("Error while deleting : " + err.message);
     }
@@ -170,16 +179,32 @@
                     >
                       Annuler
                     </button>
-                  {:else}
+                  {:else if deletingId !== team.id}
                     <button
                       onclick={() => startEdit(team)}
                       class="bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition"
                     >
                       Modifier
                     </button>
+                  {/if}
+
+                  {#if deletingId === team.id}
+                    <button
+                      class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+                      onclick={() => saveDelete(team.id)}
+                    >
+                      Valider
+                    </button>
+                    <button
+                      class="bg-gray-400 text-black px-3 py-1 rounded hover:bg-gray-500 transition"
+                      onclick={cancelDelete}
+                    >
+                      Annuler
+                    </button>
+                  {:else}
                     <button
                       class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
-                      onclick={() => handleDelete(team.id)}
+                      onclick={() => startDelete(team.id)}
                     >
                       Supprimer
                     </button>
