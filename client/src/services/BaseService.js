@@ -21,4 +21,20 @@ export default class BaseService {
     if (!res.ok) throw new Error(`Error fetching ${this.endpoint}/${id}`);
     return res.json();
   }
+
+  async delete(id, fetchFn = fetch) {
+    const res = await fetchFn(`${this.baseUrl}/${this.endpoint}/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      let errorMessage = `Error deleting ${this.endpoint}/${id}`;
+      try {
+        const data = await res.json();
+        if (data.error) errorMessage = data.error;
+      } catch {}
+      throw new Error(errorMessage);
+    }
+
+    return true;
+  }
 }

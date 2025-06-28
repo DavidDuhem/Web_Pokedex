@@ -1,6 +1,7 @@
 <script>
   /** @type {{ data: import('./$types').PageData }} */
-  let { data } = $props();
+
+  export let data;
 </script>
 
 {#if data.error}

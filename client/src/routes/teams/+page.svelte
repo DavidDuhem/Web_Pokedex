@@ -1,6 +1,20 @@
 <script>
+  import TeamService from "../../services/TeamService.js";
+
   /** @type {{ data: import('./$types').PageData }} */
-  let { data } = $props();
+  export let data;
+
+  const service = new TeamService();
+  let teams = [...data.teams];
+
+  async function handleDelete(id) {
+    try {
+      await service.delete(id, fetch);
+      teams = teams.filter((team) => team.id !== id);
+    } catch (err) {
+      alert("Erreur lors de la suppression : " + err.message);
+    }
+  }
 </script>
 
 <div class="p-5">
@@ -51,7 +65,7 @@
 
   {#if data.error}
     <p>Erreur : {data.error}</p>
-  {:else if !data.teams || data.teams.length === 0}
+  {:else if teams.length === 0}
     <p>Aucune équipe trouvée.</p>
   {:else}
     <div class="rounded-xl shadow-md w-full max-w-4xl mx-auto">
@@ -64,7 +78,7 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-red-100">
-          {#each data.teams as team}
+          {#each teams as team}
             <tr>
               <td
                 class="px-4 py-3 font-semibold text-gray-800 whitespace-normal"
@@ -83,6 +97,7 @@
                   </button>
                   <button
                     class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
+                    onclick={() => handleDelete(team.id)}
                   >
                     Supprimer
                   </button>
