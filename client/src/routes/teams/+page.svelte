@@ -201,7 +201,7 @@
                     >
                       Annuler
                     </button>
-                  {:else}
+                  {:else if editingId !== team.id}
                     <button
                       class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
                       onclick={() => startDelete(team.id)}
