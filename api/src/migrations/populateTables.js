@@ -1572,17 +1572,14 @@ const vol = await PokeType.create({ id: 17, name: "Vol", color: "6699ff" });
 console.log("🚧 Adding Teams ...");
 
 const ultimateTeam = await Team.create({
-  id: 1,
   name: "Ultimate Team",
   description: "La meilleure team du monde",
 });
 const laTeamDeLenfer = await Team.create({
-  id: 2,
   name: "La Team de l'enfer",
   description: "Le feuuuuu",
 });
 const squadFofolle = await Team.create({
-  id: 3,
   name: "Squad fofolle",
   description: "Pour tout gagner",
 });

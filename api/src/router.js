@@ -27,6 +27,18 @@ router.get(
   "/types/:id",
   cw((req, res, next) => typeController.getById(req, res, next))
 );
+router.post(
+  "/teams",
+  cw((req, res, next) => teamController.create(req, res, next))
+);
+router.patch(
+  "/teams/:id",
+  cw((req, res, next) => teamController.update(req, res, next))
+);
+router.delete(
+  "/teams/:id",
+  cw((req, res, next) => teamController.delete(req, res, next))
+);
 
 // == Routes des Teams ==
 
