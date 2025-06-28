@@ -1,21 +1,23 @@
 <script>
   import { onMount } from 'svelte';
-  import { pokemons, loading, error, loadPokemons } from '../stores/pokemonStore.js';
+import { pokemons, pokemonLoading, pokemonError, loadPokemons } from "../stores/PokemonStore.js";
+import { types, typeLoading, typeError, loadTypes } from "../stores/TypeStore.js";
+import { teams, teamLoading, teamError, loadTeams } from "../stores/TeamStore.js";
 
   onMount(() =>{
-    loadPokemons();
+    loadTeams();
   })
 </script>
 
 
-{#if $loading}
+{#if $teamLoading}
   <p>Chargement...</p>
-{:else if $error}
-  <p>Erreur : {$error}</p>
+{:else if $teamError}
+  <p>Erreur : {$teamError}</p>
 {:else}
   <ul>
-    {#each $pokemons as pokemon}
-      <li>{pokemon.name}</li>
+    {#each $teams as team}
+      <li>{team.name}</li>
     {/each}
   </ul>
 {/if}
