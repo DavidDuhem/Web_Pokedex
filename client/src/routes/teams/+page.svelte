@@ -3,6 +3,15 @@
   let { data } = $props();
 </script>
 
+<div class="p-5">
+  <a
+    href="/"
+    class="bg-red-500 text-white px-6 py-2 mt-5 ml-5 rounded-lg hover:bg-red-600 transition h-fit"
+  >
+    ← Retour
+  </a>
+</div>
+
 <div class="max-w-4xl mx-auto mt-8 px-4">
   <h1 class="text-3xl font-bold text-red-600 mb-4">Mes Équipes</h1>
 
@@ -60,7 +69,7 @@
               <td
                 class="px-4 py-3 font-semibold text-gray-800 whitespace-normal"
               >
-                <a href="/teams/{team.id}">{team.name}</a>
+                <a href="/teams/{team.id}" class="link">{team.name}</a>
               </td>
               <td class="px-4 py-3 text-gray-600 whitespace-normal break-words">
                 {team.description}
