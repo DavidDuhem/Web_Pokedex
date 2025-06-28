@@ -30,7 +30,7 @@ export default class BaseService {
     });
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.error || "Erreur lors de la création");
+      throw new Error(err.error || "Error while creating");
     }
     return res.json();
   }
@@ -49,5 +49,20 @@ export default class BaseService {
     }
 
     return true;
+  }
+
+  async update(id, data, fetchFn = fetch) {
+    const res = await fetchFn(`${this.baseUrl}/${this.endpoint}/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Error while updating");
+    }
+
+    return res.json();
   }
 }

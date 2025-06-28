@@ -7,15 +7,43 @@
   const service = new TeamService();
   let teams = [...data.teams];
 
+  let editingId = null;
+
+  let editName = "";
+  let editDescription = "";
   let name = "";
   let description = "";
+
+  function startEdit(team) {
+    editingId = team.id;
+    editName = team.name;
+    editDescription = team.description;
+  }
+
+  async function saveEdit(id) {
+    try {
+      const updatedTeam = await service.update(
+        id,
+        { name: editName, description: editDescription },
+        fetch
+      );
+      teams = teams.map((t) => (t.id === id ? updatedTeam : t));
+      editingId = null;
+    } catch (err) {
+      alert("Error while updating: " + err.message);
+    }
+  }
+
+  function cancelEdit() {
+    editingId = null;
+  }
 
   async function handleDelete(id) {
     try {
       await service.delete(id, fetch);
       teams = teams.filter((team) => team.id !== id);
     } catch (err) {
-      alert("Erreur lors de la suppression : " + err.message);
+      alert("Error while deleting : " + err.message);
     }
   }
 
@@ -105,24 +133,48 @@
               <td
                 class="px-4 py-3 font-semibold text-gray-800 whitespace-normal"
               >
-                <a href="/teams/{team.id}" class="link">{team.name}</a>
+                {#if editingId === team.id}
+                  <input type="text" bind:value={editName} />
+                {:else}
+                  <a href="/teams/{team.id}" class="link">{team.name}</a>
+                {/if}
               </td>
               <td class="px-4 py-3 text-gray-600 whitespace-normal break-words">
-                {team.description}
+                {#if editingId === team.id}
+                  <input type="text" bind:value={editDescription} />
+                {:else}
+                  {team.description}
+                {/if}
               </td>
               <td class="px-4 py-3 text-right">
                 <div class="flex flex-wrap justify-center gap-2">
-                  <button
-                    class="bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition"
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
-                    onclick={() => handleDelete(team.id)}
-                  >
-                    Supprimer
-                  </button>
+                  {#if editingId === team.id}
+                    <button
+                      class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+                      onclick={() => saveEdit(team.id)}
+                    >
+                      Enregistrer
+                    </button>
+                    <button
+                      class="bg-gray-400 text-black px-3 py-1 rounded hover:bg-gray-500 transition"
+                      onclick={cancelEdit}
+                    >
+                      Annuler
+                    </button>
+                  {:else}
+                    <button
+                      onclick={() => startEdit(team)}
+                      class="bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
+                      onclick={() => handleDelete(team.id)}
+                    >
+                      Supprimer
+                    </button>
+                  {/if}
                   <!-- <button
                     class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
                   >
