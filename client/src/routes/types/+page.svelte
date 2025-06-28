@@ -1,29 +1,16 @@
 <script>
   /** @type {{ data: import('./$types').PageData }} */
   let { data } = $props();
-
-  import { onMount } from "svelte";
-
-  import {
-    types,
-    typeLoading,
-    typeError,
-    loadTypes,
-  } from "../../stores/TypeStore.js";
-
-  onMount(() => {
-    loadTypes();
-  });
 </script>
 
-{#if $typeLoading}
-  <p>Chargement...</p>
-{:else if $typeError}
-  <p>Erreur : {$typeError}</p>
+{#if data.error}
+  <p>Erreur : {data.error}</p>
+{:else if !data.types || data.types.length === 0}
+  <p>Aucun type trouvé.</p>
 {:else}
   <ul>
-    {#each $types as type}
-      <li>{type.name}</li>
+    {#each data.types as type}
+      <li><a href={`/types/${type.id}`}>{type.name}</a></li>
     {/each}
   </ul>
 {/if}

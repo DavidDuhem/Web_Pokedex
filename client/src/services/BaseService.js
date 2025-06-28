@@ -7,15 +7,17 @@ export default class BaseService {
     this.endpoint = endpoint;
   }
 
-  async getAll() {
+  // fetchFn is from sveltekit, it makes it work server AND client side
+
+  async getAll(fetchFn = fetch) {
     console.log(`${this.baseUrl}/${this.endpoint}`);
-    const res = await fetch(`${this.baseUrl}/${this.endpoint}`);
+    const res = await fetchFn(`${this.baseUrl}/${this.endpoint}`);
     if (!res.ok) throw new Error(`Error fetching ${this.endpoint}`);
     return res.json();
   }
 
-  async getOne(id) {
-    const res = await fetch(`${this.baseUrl}/${this.endpoint}/${id}`);
+  async getOne(id, fetchFn = fetch) {
+    const res = await fetchFn(`${this.baseUrl}/${this.endpoint}/${id}`);
     if (!res.ok) throw new Error(`Error fetching ${this.endpoint}/${id}`);
     return res.json();
   }
