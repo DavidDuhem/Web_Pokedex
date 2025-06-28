@@ -45,14 +45,13 @@
   {:else if !data.teams || data.teams.length === 0}
     <p>Aucune équipe trouvée.</p>
   {:else}
-    <!-- Tableau des équipes -->
     <div class="rounded-xl shadow-md w-full max-w-4xl mx-auto">
       <table class="w-full border-collapse table-fixed">
         <thead class="bg-red-500 text-white">
           <tr>
             <th class="text-left px-4 py-3 w-[20%]">Nom</th>
             <th class="text-left px-4 py-3 w-[50%]">Description</th>
-            <th class="text-left px-4 py-3 w-[30%]">Actions</th>
+            <th class="text-center px-4 py-3 w-[30%]">Actions</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-red-100">
@@ -61,7 +60,7 @@
               <td
                 class="px-4 py-3 font-semibold text-gray-800 whitespace-normal"
               >
-                {team.name}
+                <a href="/teams/{team.id}">{team.name}</a>
               </td>
               <td class="px-4 py-3 text-gray-600 whitespace-normal break-words">
                 {team.description}
@@ -82,7 +81,6 @@
               </td>
             </tr>
           {/each}
-          <!-- Ajoute plus de lignes dynamiquement ici -->
         </tbody>
       </table>
     </div>
