@@ -131,17 +131,26 @@
           {#each teams as team}
             <tr>
               <td
-                class="px-4 py-3 font-semibold text-gray-800 whitespace-normal"
+                class="px-4 py-3 font-semibold text-gray-800 whitespace-normal break-words"
               >
                 {#if editingId === team.id}
-                  <input type="text" bind:value={editName} />
+                  <input
+                    type="text"
+                    bind:value={editName}
+                    class="w-full max-w-full px-2 py-1 border rounded border-red-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                  />
                 {:else}
                   <a href="/teams/{team.id}" class="link">{team.name}</a>
                 {/if}
               </td>
               <td class="px-4 py-3 text-gray-600 whitespace-normal break-words">
                 {#if editingId === team.id}
-                  <input type="text" bind:value={editDescription} />
+                  <textarea
+                    bind:value={editDescription}
+                    rows="4"
+                    cols="40"
+                    class="w-full max-w-full px-2 py-1 border rounded border-red-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                  ></textarea>
                 {:else}
                   {team.description}
                 {/if}
