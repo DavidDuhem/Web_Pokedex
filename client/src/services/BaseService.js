@@ -22,6 +22,19 @@ export default class BaseService {
     return res.json();
   }
 
+  async create(data, fetchFn = fetch) {
+    const res = await fetchFn(`${this.baseUrl}/${this.endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Erreur lors de la création");
+    }
+    return res.json();
+  }
+
   async delete(id, fetchFn = fetch) {
     const res = await fetchFn(`${this.baseUrl}/${this.endpoint}/${id}`, {
       method: "DELETE",

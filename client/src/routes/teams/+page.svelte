@@ -7,12 +7,29 @@
   const service = new TeamService();
   let teams = [...data.teams];
 
+  let name = "";
+  let description = "";
+
   async function handleDelete(id) {
     try {
       await service.delete(id, fetch);
       teams = teams.filter((team) => team.id !== id);
     } catch (err) {
       alert("Erreur lors de la suppression : " + err.message);
+    }
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    try {
+      const newTeam = await service.create({ name, description }, fetch);
+
+      teams = [...teams, newTeam];
+      name = "";
+      description = "";
+    } catch (err) {
+      alert("Erreur lors de la création : " + err.message);
     }
   }
 </script>
@@ -30,7 +47,10 @@
   <h1 class="text-3xl font-bold text-red-600 mb-4">Mes Équipes</h1>
 
   <!-- Formulaire d’ajout -->
-  <form class="flex flex-col gap-4 sm:flex-row sm:items-end mb-6">
+  <form
+    onsubmit={handleSubmit}
+    class="flex flex-col gap-4 sm:flex-row sm:items-end mb-6"
+  >
     <div class="flex-1">
       <label
         class="block text-sm font-medium text-gray-700 mb-1 hidden"
@@ -40,6 +60,7 @@
         id="name"
         type="text"
         placeholder="Nom de l'équipe"
+        bind:value={name}
         class="w-full px-4 py-2 border border-red-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
       />
     </div>
@@ -52,6 +73,7 @@
         id="description"
         type="text"
         placeholder="Description"
+        bind:value={description}
         class="w-full px-4 py-2 border border-red-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
       />
     </div>
