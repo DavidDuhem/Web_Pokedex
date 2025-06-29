@@ -2,23 +2,46 @@
   import BackButton from "../../../lib/components/basics/BackButton.svelte";
   import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
   import TeamService from "../../../services/TeamService.js";
+  import PokemonService from "../../../services/PokemonService.js";
+  import PopupTeamPokemon from "../../../lib/components/teams/PopupTeamPokemon.svelte";
 
   /** @type {{ data: import('./$types').PageData }} */
 
   export let data;
+  let showPopup = false;
 
-  const service = new TeamService();
+  const teamService = new TeamService();
+  const pokemonService = new PokemonService();
 
   async function confirmDelete(pokemonId) {
     const id = data.team.id;
     try {
-      await service.deleteTeamPokemon(id, pokemonId, fetch);
+      await teamService.deleteTeamPokemon(id, pokemonId, fetch);
       data.team.pokemons = data.team.pokemons.filter(
         (pokemon) => pokemon.id !== pokemonId
       );
     } catch (err) {
       alert("Error while deleting : " + err.message);
     }
+  }
+
+  async function confirmAddPokemon(pokemonId) {
+    const id = data.team.id;
+    console.log("Add Server");
+    try {
+      await teamService.addTeamPokemon(id, { pokemonId }, fetch);
+      const pokemon = await pokemonService.getOne(pokemonId);
+      if (pokemon) {
+        data.team.pokemons = [...data.team.pokemons, pokemon];
+      }
+    } catch (err) {
+      alert("Error while adding : " + err.message);
+    }
+    showPopup = false;
+  }
+
+  function handleAddPopup() {
+    showPopup = true;
   }
 </script>
 
@@ -29,19 +52,15 @@
 {:else if !data.team}
   <p>Équipe non trouvée.</p>
 {:else}
-  <!-- autres infos -->
   <div
     class="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-xl shadow-md border border-red-200"
   >
     <div class="flex flex-col sm:flex-row items-start gap-6">
-      <!-- Image -->
       <img
         src="https://www.123-stickers.com/7667/autocollant-sacha-et-pikachu-pokemon.jpg"
         alt="Detail Équipe"
         class="w-64 h-64 object-cover rounded-lg border-2 border-red-500"
       />
-
-      <!-- Infos -->
       <div class="flex-1">
         <h2 class="text-2xl font-bold text-red-600 mb-2">{data.team.name}</h2>
         <p class="text-gray-700">{data.team.description}</p>
@@ -92,7 +111,40 @@
             />
           </li>
         {/each}
+        {#if data.team.pokemons.length < 6}
+          <li
+            class="border-2 border-dashed border-red-300 rounded-lg p-0 overflow-hidden"
+          >
+            <button
+              type="button"
+              class="w-full h-full flex flex-col justify-center items-center p-4 text-red-500 cursor-pointer hover:bg-red-50 transition focus:outline-none focus:ring-2 focus:ring-red-500"
+              on:click={handleAddPopup}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              <span class="mt-2 font-semibold">Ajouter</span>
+            </button>
+          </li>
+        {/if}
       </ul>
     {/if}
   </div>
 {/if}
+
+<PopupTeamPokemon
+  {showPopup}
+  onClose={() => (showPopup = false)}
+  onValidate={confirmAddPokemon}
+/>

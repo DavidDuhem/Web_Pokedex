@@ -63,49 +63,6 @@
                 onConfirm={confirmDelete}
                 withConfirmation={true}
               />
-              <!-- {#if editingId === team.id}
-                <button
-                  class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
-                  on:click={() => confirmEdit(team.id)}
-                >
-                  Enregistrer
-                </button>
-                <button
-                  class="bg-gray-400 text-black px-3 py-1 rounded hover:bg-gray-500 transition"
-                  on:click={cancelEdit}
-                >
-                  Annuler
-                </button>
-              {:else if deletingId !== team.id}
-                <button
-                  on:click={() => startEdit(team)}
-                  class="bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition"
-                >
-                  Modifier
-                </button>
-              {/if}
-
-              {#if deletingId === team.id}
-                <button
-                  class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
-                  on:click={() => confirmDelete(team.id)}
-                >
-                  Valider
-                </button>
-                <button
-                  class="bg-gray-400 text-black px-3 py-1 rounded hover:bg-gray-500 transition"
-                  on:click={cancelDelete}
-                >
-                  Annuler
-                </button>
-              {:else if editingId !== team.id}
-                <button
-                  class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
-                  on:click={() => startDelete(team.id)}
-                >
-                  Supprimer
-                </button>
-              {/if} -->
             </div>
           </td>
         </tr>

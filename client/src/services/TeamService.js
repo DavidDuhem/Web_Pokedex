@@ -14,6 +14,22 @@ export default class TeamService extends BaseService {
     return res.json();
   }
 
+  async addTeamPokemon(teamId, data, fetchFn = fetch) {
+    const res = await fetchFn(
+      `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Error while creating");
+    }
+    return res.json();
+  }
+
   async deleteTeamPokemon(teamId, pokemonId, fetchFn = fetch) {
     const res = await fetchFn(
       `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons/${pokemonId}`,
