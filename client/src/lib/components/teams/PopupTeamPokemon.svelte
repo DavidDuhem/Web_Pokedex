@@ -42,7 +42,7 @@
             <li>
               <button
                 type="button"
-                class="flex items-center gap-3 p-2 w-full text-left rounded hover:bg-gray-100 cursor-pointer"
+                class={`flex items-center gap-3 p-2 w-full text-left rounded hover:bg-gray-100 cursor-pointer ${pokemon.id === pokemonToAddId ? "bg-gray-200" : ""}`}
                 on:click={() => onSelect(pokemon.id)}
               >
                 <img
