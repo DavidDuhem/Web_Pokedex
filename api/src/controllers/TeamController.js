@@ -11,16 +11,40 @@ export default class TeamController extends BaseController {
     const teamId = parseInt(req.params.id);
 
     try {
-      const teamWithPokemons = await Team.findByPk(teamId, {
+      // const teamWithPokemons = await Team.findByPk(teamId, {
+      //   include: {
+      //     model: Pokemon,
+      //     as: "pokemons",
+      //     through: { attributes: [] },
+      //   },
+      // });
+      const team = await Team.findByPk(teamId);
+      if (!team) return res.status(404).json({ error: "Team not found" });
+
+      const pokemonTeams = await PokemonTeam.findAll({
+        where: { team_id: teamId },
         include: {
           model: Pokemon,
-          as: "pokemons",
-          through: { attributes: [] },
+          as: "pokemon",
         },
       });
 
-      if (!teamWithPokemons)
-        return res.status(404).json({ error: "Team and Pokemons not found" });
+      if (!pokemonTeams)
+        return res.status(404).json({ error: "PokemonTeam not found" });
+
+      const pokemons = pokemonTeams.map((pt) => pt.pokemon);
+
+      const teamWithPokemons = {
+        id: team.id,
+        name: team.name,
+        description: team.description,
+        pokemons,
+      };
+
+      // if (!teamWithPokemons)
+      //   return res.status(404).json({ error: "Team and Pokemons not found" });
+
+      console.log(teamWithPokemons);
       res.json(teamWithPokemons);
     } catch (err) {
       res.status(500).json({ error: err.message });
