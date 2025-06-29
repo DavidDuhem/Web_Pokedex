@@ -1,5 +1,6 @@
 import { Pokemon } from "./Pokemon.js";
 import { PokeType } from "./PokeType.js";
+import { PokemonTeam } from "./PokemonTeam.js";
 import { Team } from "./Team.js";
 
 Pokemon.belongsToMany(PokeType, {
@@ -15,15 +16,26 @@ PokeType.belongsToMany(Pokemon, {
 });
 
 Pokemon.belongsToMany(Team, {
-  through: "pokemon_team",
+  through: {
+    model: PokemonTeam,
+    unique: false,
+  },
   as: "teams",
   foreignKey: "pokemon_id",
 });
 
 Team.belongsToMany(Pokemon, {
-  through: "pokemon_team",
+  through: {
+    model: PokemonTeam,
+    unique: false,
+  },
   as: "pokemons",
   foreignKey: "team_id",
 });
 
-export { Pokemon, PokeType, Team };
+PokemonTeam.belongsTo(Pokemon, {
+  foreignKey: "pokemon_id",
+  as: "pokemon",
+});
+
+export { Pokemon, PokeType, Team, PokemonTeam };
