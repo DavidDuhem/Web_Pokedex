@@ -1,4 +1,4 @@
-import { Team, Pokemon, sequelize } from "../models/index.js";
+import { Team, Pokemon, PokemonTeam, sequelize } from "../models/index.js";
 import BaseController from "./BaseController.js";
 import teamchema from "../schemas/team.schema.js";
 
@@ -32,16 +32,19 @@ export default class TeamController extends BaseController {
     const { pokemonId } = req.body;
 
     try {
-      const team = await Team.findByPk(teamId);
-      if (!team) return res.status(404).json({ error: "Team not found" });
+      // const team = await Team.findByPk(teamId);
+      // if (!team) return res.status(404).json({ error: "Team not found" });
 
-      const pokemon = await Pokemon.findByPk(pokemonId);
-      if (!pokemon) return res.status(404).json({ error: "Pokemon not found" });
+      // const pokemon = await Pokemon.findByPk(pokemonId);
+      // if (!pokemon) return res.status(404).json({ error: "Pokemon not found" });
 
-      await team.addPokemon(pokemon);
+      await PokemonTeam.create({ pokemon_id: pokemonId, team_id: teamId });
 
       res.json({ message: "Pokemon added to team successfully" });
     } catch (err) {
+      if (err.name === "SequelizeForeignKeyConstraintError") {
+        return res.status(400).json({ error: "Team or Pokemon not found" });
+      }
       res.status(500).json({ error: err.message });
     }
   }

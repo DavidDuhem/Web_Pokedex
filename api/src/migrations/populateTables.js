@@ -1,4 +1,10 @@
-import { Pokemon, PokeType, Team, sequelize } from "../models/index.js";
+import {
+  Pokemon,
+  PokeType,
+  Team,
+  PokemonTeam,
+  sequelize,
+} from "../models/index.js";
 
 console.log("🚧 Adding Pokemons...");
 
@@ -1740,28 +1746,45 @@ await mew.addTypes([psy]);
 
 console.log("🚧 Adding Types to Pokemons ...");
 
-await ultimateTeam.addPokemons([
-  florizarre,
-  dracaufeu,
-  tortank,
-  papilusion,
-  dardargnan,
-  nidoking,
-]);
-await laTeamDeLenfer.addPokemons([
-  dracaufeu,
-  feunard,
-  arcanin,
-  magmar,
-  sulfura,
-]);
-await squadFofolle.addPokemons([
-  mew,
-  mewtwo,
-  dracolosse,
-  sulfura,
-  electhor,
-  artikodin,
+// await ultimateTeam.addPokemons(
+//   [florizarre, dracaufeu, tortank, papilusion, dardargnan, nidoking],
+//   {
+//     through: {},
+//   }
+// );
+// await laTeamDeLenfer.addPokemons(
+//   [dracaufeu, feunard, arcanin, magmar, sulfura],
+//   {
+//     through: {},
+//   }
+// );
+// await squadFofolle.addPokemons(
+//   [mew, mewtwo, dracolosse, sulfura, electhor, artikodin],
+//   {
+//     through: {},
+//   }
+// );
+//
+
+await PokemonTeam.bulkCreate([
+  { pokemon_id: 3, team_id: 1 },
+  { pokemon_id: 6, team_id: 1 },
+  { pokemon_id: 9, team_id: 1 },
+  { pokemon_id: 12, team_id: 1 },
+  { pokemon_id: 15, team_id: 1 },
+  { pokemon_id: 34, team_id: 1 },
+  { pokemon_id: 6, team_id: 2 },
+  { pokemon_id: 38, team_id: 2 },
+  { pokemon_id: 59, team_id: 2 },
+  { pokemon_id: 126, team_id: 2 },
+  { pokemon_id: 136, team_id: 2 },
+  { pokemon_id: 146, team_id: 2 },
+  { pokemon_id: 151, team_id: 3 },
+  { pokemon_id: 150, team_id: 3 },
+  { pokemon_id: 149, team_id: 3 },
+  { pokemon_id: 146, team_id: 3 },
+  { pokemon_id: 145, team_id: 3 },
+  { pokemon_id: 144, team_id: 3 },
 ]);
 
 console.log("✅ Migration OK ! Closing base ...");
