@@ -2,7 +2,6 @@
   import BackButton from "../../../lib/components/basics/BackButton.svelte";
   import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
   import TeamService from "../../../services/TeamService.js";
-  import PokemonService from "../../../services/PokemonService.js";
   import PopupTeamPokemon from "../../../lib/components/teams/PopupTeamPokemon.svelte";
 
   /** @type {{ data: import('./$types').PageData }} */
@@ -11,7 +10,6 @@
   let showPopup = false;
 
   const teamService = new TeamService();
-  const pokemonService = new PokemonService();
 
   async function confirmDelete(pokemonId) {
     const id = data.team.id;
@@ -27,12 +25,13 @@
 
   async function confirmAddPokemon(pokemonId) {
     const id = data.team.id;
-    console.log("Add Server");
     try {
       await teamService.addTeamPokemon(id, { pokemonId }, fetch);
-      const pokemon = await pokemonService.getOne(pokemonId);
-      if (pokemon) {
-        data.team.pokemons = [...data.team.pokemons, pokemon];
+      const newPokemon = data.allPokemons.find(
+        (pokemon) => pokemon.id === pokemonId
+      );
+      if (newPokemon) {
+        data.team.pokemons = [...data.team.pokemons, newPokemon];
       }
     } catch (err) {
       alert("Error while adding : " + err.message);
@@ -147,4 +146,5 @@
   {showPopup}
   onClose={() => (showPopup = false)}
   onValidate={confirmAddPokemon}
+  pokemons={data.allPokemons}
 />
