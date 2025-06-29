@@ -1,9 +1,25 @@
 <script>
   import BackButton from "../../../lib/components/basics/BackButton.svelte";
+  import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
+  import TeamService from "../../../services/TeamService.js";
 
   /** @type {{ data: import('./$types').PageData }} */
 
   export let data;
+
+  const service = new TeamService();
+
+  async function confirmDelete(pokemonId) {
+    const id = data.team.id;
+    try {
+      await service.deleteTeamPokemon(id, pokemonId, fetch);
+      data.team.pokemons = data.team.pokemons.filter(
+        (pokemon) => pokemon.id !== pokemonId
+      );
+    } catch (err) {
+      alert("Error while deleting : " + err.message);
+    }
+  }
 </script>
 
 <BackButton href="/teams" />
@@ -53,7 +69,7 @@
             />
             <div class="flex flex-col items-start">
               <span class="font-bold text-red-600">{pokemon.name}</span>
-              <div class="flex items-start gap-5">
+              <div class="flex flex-wrap items-start gap-5">
                 <p><span class="font-bold italic">HP</span> : {pokemon.hp}</p>
                 <p><span class="font-bold italic">ATK</span> : {pokemon.atk}</p>
                 <p><span class="font-bold italic">DEF</span> : {pokemon.def}</p>
@@ -68,6 +84,12 @@
                 </p>
               </div>
             </div>
+            <DeleteButton
+              id={pokemon.id}
+              onConfirm={confirmDelete}
+              startText="x"
+              withConfirmation={false}
+            />
           </li>
         {/each}
       </ul>

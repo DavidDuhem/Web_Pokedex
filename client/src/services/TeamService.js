@@ -13,4 +13,18 @@ export default class TeamService extends BaseService {
       throw new Error(`Error fetching ${this.endpoint}/${id}/pokemons`);
     return res.json();
   }
+
+  async deleteTeamPokemon(teamId, pokemonId, fetchFn = fetch) {
+    const res = await fetchFn(
+      `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons/${pokemonId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (!res.ok)
+      throw new Error(
+        `Error fetching ${this.endpoint}/${teamId}/pokemons/${pokemonId}`
+      );
+    return res.json();
+  }
 }

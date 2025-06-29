@@ -1,4 +1,6 @@
 <script>
+  import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
+
   export let teams = [];
   export let editingId;
   export let deletingId;
@@ -6,10 +8,15 @@
   export let editDescription;
   export let startEdit;
   export let cancelEdit;
-  export let saveEdit;
+  export let confirmEdit;
   export let startDelete;
   export let cancelDelete;
-  export let saveDelete;
+  export let confirmDelete;
+
+  console.log(
+    "confirmDelete est une fonction ?",
+    typeof confirmDelete === "function"
+  );
 </script>
 
 <div class="rounded-xl shadow-md w-full max-w-4xl mx-auto">
@@ -51,10 +58,15 @@
           </td>
           <td class="px-4 py-3 text-right">
             <div class="flex flex-wrap justify-center gap-2">
-              {#if editingId === team.id}
+              <DeleteButton
+                id={team.id}
+                onConfirm={confirmDelete}
+                withConfirmation={true}
+              />
+              <!-- {#if editingId === team.id}
                 <button
                   class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
-                  on:click={() => saveEdit(team.id)}
+                  on:click={() => confirmEdit(team.id)}
                 >
                   Enregistrer
                 </button>
@@ -76,7 +88,7 @@
               {#if deletingId === team.id}
                 <button
                   class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
-                  on:click={() => saveDelete(team.id)}
+                  on:click={() => confirmDelete(team.id)}
                 >
                   Valider
                 </button>
@@ -93,7 +105,7 @@
                 >
                   Supprimer
                 </button>
-              {/if}
+              {/if} -->
             </div>
           </td>
         </tr>

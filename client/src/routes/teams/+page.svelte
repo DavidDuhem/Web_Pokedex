@@ -64,7 +64,7 @@
     editDescription = team.description;
   }
 
-  async function saveEdit(id) {
+  async function confirmEdit(id) {
     try {
       const updatedTeam = await service.update(
         id,
@@ -94,7 +94,7 @@
     deletingId = null;
   }
 
-  async function saveDelete(id) {
+  async function confirmDelete(id) {
     try {
       await service.delete(id, fetch);
       teams = teams.filter((team) => team.id !== id);
@@ -125,10 +125,10 @@
       bind:editDescription
       {startEdit}
       {cancelEdit}
-      {saveEdit}
+      {confirmEdit}
       {startDelete}
       {cancelDelete}
-      {saveDelete}
+      {confirmDelete}
     />
   {/if}
 </div>
