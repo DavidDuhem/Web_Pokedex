@@ -1,4 +1,6 @@
 import BaseService from "./BaseService";
+import { token } from "../stores/auth.js";
+import { get } from "svelte/store";
 
 export default class TeamService extends BaseService {
   constructor(baseUrl) {
@@ -19,7 +21,10 @@ export default class TeamService extends BaseService {
       `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${get(token)}`,
+        },
         body: JSON.stringify(data),
       }
     );
@@ -35,6 +40,9 @@ export default class TeamService extends BaseService {
       `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons/${pokemonId}`,
       {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${get(token)}`,
+        },
       }
     );
     if (!res.ok)

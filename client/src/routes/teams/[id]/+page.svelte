@@ -1,12 +1,16 @@
 <script>
+  import { isLoggedIn, token } from "../../../stores/auth.js";
+
   import BackButton from "../../../lib/components/basics/BackButton.svelte";
+  import ConnexionButton from "../../../lib/components/basics/ConnexionButton.svelte";
   import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
   import TeamService from "../../../services/TeamService.js";
-  import PopupTeamPokemon from "../../../lib/components/teams/PopupTeamPokemon.svelte";
+  import PopupTeamPokemon from "../../../lib/components/popups/PopupTeamPokemon.svelte";
 
   /** @type {{ data: import('./$types').PageData }} */
 
   export let data;
+
   let showPopup = false;
 
   const teamService = new TeamService();
@@ -43,8 +47,6 @@
     showPopup = true;
   }
 </script>
-
-<BackButton href="/teams" />
 
 {#if data.error}
   <p>Erreur : {data.error}</p>
@@ -87,10 +89,26 @@
             />
             <div class="flex flex-col items-start">
               <span class="font-bold text-red-600">{pokemon.name}</span>
-              <div class="flex flex-wrap items-start gap-5">
+              <div class="flex gap-2 mt-2">
+                {#each pokemon.types as type}
+                  <a href={`/types/${type.id}`}>
+                    <span
+                      style="background-color: #{type.color}"
+                      class="text-black rounded-full px-4 py-1 text-sm font-semibold capitalize select-none"
+                    >
+                      {type.name}
+                    </span>
+                  </a>
+                {/each}
+              </div>
+              <div class="flex flex-wrap items-start gap-5 mt-2">
                 <p><span class="font-bold italic">HP</span> : {pokemon.hp}</p>
-                <p><span class="font-bold italic">ATK</span> : {pokemon.atk}</p>
-                <p><span class="font-bold italic">DEF</span> : {pokemon.def}</p>
+                <p>
+                  <span class="font-bold italic">ATK</span> : {pokemon.atk}
+                </p>
+                <p>
+                  <span class="font-bold italic">DEF</span> : {pokemon.def}
+                </p>
                 <p>
                   <span class="font-bold italic">ATK_SPE</span> : {pokemon.atk_spe}
                 </p>
@@ -102,18 +120,20 @@
                 </p>
               </div>
             </div>
-            <DeleteButton
-              id={pokemon.id}
-              onConfirm={confirmDelete}
-              startText="x"
-              withConfirmation={false}
-            />
+            {#if $isLoggedIn}
+              <DeleteButton
+                id={pokemon.id}
+                onConfirm={confirmDelete}
+                startText="x"
+                withConfirmation={false}
+              />
+            {/if}
           </li>
         {/each}
       </ul>
     {/if}
-    {#if data.team.pokemons.length < 6}
-      <ul class="space-y-4">
+    {#if $isLoggedIn && data.team.pokemons.length < 6}
+      <ul class="space-y-4 mt-4">
         <li
           class="border-2 border-dashed border-red-300 rounded-lg p-0 overflow-hidden"
         >

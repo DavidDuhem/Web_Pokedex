@@ -3,6 +3,7 @@
   import BackButton from "../../lib/components/basics/BackButton.svelte";
   import TeamTable from "../../lib/components/teams/TeamTable.svelte";
   import TeamForm from "../../lib/components/teams/TeamForm.svelte";
+  import { ssrImportKey } from "vite/module-runner";
 
   /** @type {{ data: import('./$types').PageData }} */
   export let data;
@@ -49,7 +50,7 @@
       name = "";
       description = "";
     } catch (err) {
-      alert("Erreur lors de la création : " + err.message);
+      alert("Error while creating : " + err.message);
     }
   }
 
@@ -104,8 +105,6 @@
     }
   }
 </script>
-
-<BackButton href="/" />
 
 <div class="max-w-4xl mx-auto mt-8 px-4">
   <h1 class="text-3xl font-bold text-red-600 mb-4">Mes Équipes</h1>

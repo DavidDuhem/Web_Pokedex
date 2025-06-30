@@ -1,4 +1,10 @@
-import { Team, Pokemon, PokemonTeam, sequelize } from "../models/index.js";
+import {
+  Team,
+  Pokemon,
+  PokemonTeam,
+  PokeType,
+  sequelize,
+} from "../models/index.js";
 import BaseController from "./BaseController.js";
 import teamchema from "../schemas/team.schema.js";
 
@@ -19,6 +25,11 @@ export default class TeamController extends BaseController {
         include: {
           model: Pokemon,
           as: "pokemon",
+          include: {
+            model: PokeType,
+            as: "types",
+            through: { attributes: [] },
+          },
         },
       });
 
@@ -33,7 +44,6 @@ export default class TeamController extends BaseController {
         description: team.description,
         pokemons,
       };
-      console.log(teamWithPokemons);
       res.json(teamWithPokemons);
     } catch (err) {
       res.status(500).json({ error: err.message });
