@@ -48,10 +48,10 @@
   }
 </script>
 
-<div class="flex justify-between items-center p-5">
+<!-- <div class="flex justify-between items-center p-5">
   <BackButton href="/teams" />
   <ConnexionButton />
-</div>
+</div> -->
 
 {#if data.error}
   <p>Erreur : {data.error}</p>
