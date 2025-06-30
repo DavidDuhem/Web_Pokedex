@@ -1,7 +1,7 @@
 <script>
   import ConnexionPopup from "../popups/ConnexionPopup.svelte";
 
-  import { isLoggedIn } from "../../../stores/auth.js";
+  import { isLoggedIn, token } from "../../../stores/auth.js";
 
   let showPopup = false;
 
@@ -11,9 +11,10 @@
   }
 
   async function disconnect() {
+    token.set(null);
+    isLoggedIn.set(false);
     if (typeof document !== "undefined") {
       document.cookie = "token=; path=/; max-age=0";
-      isLoggedIn.set(false);
     }
   }
 </script>

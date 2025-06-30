@@ -1,4 +1,5 @@
 <script>
+  import { isLoggedIn, token } from "../../../stores/auth.js";
   import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
 
   export let teams = [];
@@ -58,11 +59,15 @@
           </td>
           <td class="px-4 py-3 text-right">
             <div class="flex flex-wrap justify-center gap-2">
-              <DeleteButton
-                id={team.id}
-                onConfirm={confirmDelete}
-                withConfirmation={true}
-              />
+              {#if $isLoggedIn}
+                <DeleteButton
+                  id={team.id}
+                  onConfirm={confirmDelete}
+                  withConfirmation={true}
+                />
+              {:else}
+                <p>Connexion Requise</p>
+              {/if}
             </div>
           </td>
         </tr>

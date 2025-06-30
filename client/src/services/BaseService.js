@@ -1,6 +1,9 @@
 const API_BASE_URL =
   import.meta.env.API_BASE_URL || "http://localhost:3000/api";
 
+import { token } from "../stores/auth.js";
+import { get } from "svelte/store";
+
 export default class BaseService {
   constructor(baseUrl = API_BASE_URL, endpoint) {
     this.baseUrl = baseUrl;
@@ -38,6 +41,9 @@ export default class BaseService {
   async delete(id, fetchFn = fetch) {
     const res = await fetchFn(`${this.baseUrl}/${this.endpoint}/${id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${get(token)}`,
+      },
     });
     if (!res.ok) {
       let errorMessage = `Error deleting ${this.endpoint}/${id}`;
