@@ -89,10 +89,24 @@
             />
             <div class="flex flex-col items-start">
               <span class="font-bold text-red-600">{pokemon.name}</span>
+              {#each pokemon.types as type}
+                <a href={`/types/${type.id}`}>
+                  <span
+                    style="background-color: #{type.color}"
+                    class="text-black rounded-full px-4 py-1 text-sm font-semibold capitalize select-none"
+                  >
+                    {type.name}
+                  </span>
+                </a>
+              {/each}
               <div class="flex flex-wrap items-start gap-5">
                 <p><span class="font-bold italic">HP</span> : {pokemon.hp}</p>
-                <p><span class="font-bold italic">ATK</span> : {pokemon.atk}</p>
-                <p><span class="font-bold italic">DEF</span> : {pokemon.def}</p>
+                <p>
+                  <span class="font-bold italic">ATK</span> : {pokemon.atk}
+                </p>
+                <p>
+                  <span class="font-bold italic">DEF</span> : {pokemon.def}
+                </p>
                 <p>
                   <span class="font-bold italic">ATK_SPE</span> : {pokemon.atk_spe}
                 </p>

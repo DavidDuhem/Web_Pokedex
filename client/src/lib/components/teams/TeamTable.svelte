@@ -24,6 +24,7 @@
   <table class="w-full border-collapse table-fixed">
     <thead class="bg-red-500 text-white">
       <tr>
+        <th class="text-left px-4 py-3 w-[20%]"></th>
         <th class="text-left px-4 py-3 w-[20%]">Nom</th>
         <th class="text-left px-4 py-3 w-[50%]">Description</th>
         <th class="text-center px-4 py-3 w-[30%]">Actions</th>
@@ -32,6 +33,15 @@
     <tbody class="bg-white divide-y divide-red-100">
       {#each teams as team}
         <tr>
+          <td
+            class="px-4 py-3 font-semibold text-gray-800 whitespace-normal break-words"
+          >
+            <img
+              src="https://www.123-stickers.com/7667/autocollant-sacha-et-pikachu-pokemon.jpg"
+              alt={team.name}
+              class="w-16 h-16 object-contain rounded-lg border-2 border-red-500"
+            />
+          </td>
           <td
             class="px-4 py-3 font-semibold text-gray-800 whitespace-normal break-words"
           >
