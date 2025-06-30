@@ -1,4 +1,6 @@
 import BaseService from "./BaseService";
+import { token } from "../stores/auth.js";
+import { get } from "svelte/store";
 
 export default class TeamService extends BaseService {
   constructor(baseUrl) {
@@ -14,14 +16,14 @@ export default class TeamService extends BaseService {
     return res.json();
   }
 
-  async addTeamPokemon(teamId, data, token, fetchFn = fetch) {
+  async addTeamPokemon(teamId, data, fetchFn = fetch) {
     const res = await fetchFn(
       `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${get(token)}`,
         },
         body: JSON.stringify(data),
       }
@@ -33,13 +35,13 @@ export default class TeamService extends BaseService {
     return res.json();
   }
 
-  async deleteTeamPokemon(teamId, pokemonId, token, fetchFn = fetch) {
+  async deleteTeamPokemon(teamId, pokemonId, fetchFn = fetch) {
     const res = await fetchFn(
       `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons/${pokemonId}`,
       {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${get(token)}`,
         },
       }
     );

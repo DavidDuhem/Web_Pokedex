@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte";
   import { isLoggedIn, token } from "../../../stores/auth.js";
 
   import BackButton from "../../../lib/components/basics/BackButton.svelte";
@@ -12,21 +11,14 @@
 
   export let data;
 
-  // let token = null;
-
   let showPopup = false;
 
   const teamService = new TeamService();
 
-  // onMount(() => {
-  //   token = getCookie("token");
-  //   isLoggedIn.set(isTokenValid(token));
-  // });
-
   async function confirmDelete(pokemonId) {
     const id = data.team.id;
     try {
-      await teamService.deleteTeamPokemon(id, pokemonId, token, fetch);
+      await teamService.deleteTeamPokemon(id, pokemonId, fetch);
       data.team.pokemons = data.team.pokemons.filter(
         (pokemon) => pokemon.id !== pokemonId
       );
@@ -38,7 +30,7 @@
   async function confirmAddPokemon(pokemonId) {
     const id = data.team.id;
     try {
-      await teamService.addTeamPokemon(id, { pokemonId }, token, fetch);
+      await teamService.addTeamPokemon(id, { pokemonId }, fetch);
       const newPokemon = data.allPokemons.find(
         (pokemon) => pokemon.id === pokemonId
       );
@@ -129,8 +121,8 @@
         {/each}
       </ul>
     {/if}
-    {#if data.team.pokemons.length < 6}
-      <ul class="space-y-4">
+    {#if $isLoggedIn && data.team.pokemons.length < 6}
+      <ul class="space-y-4 mt-4">
         <li
           class="border-2 border-dashed border-red-300 rounded-lg p-0 overflow-hidden"
         >

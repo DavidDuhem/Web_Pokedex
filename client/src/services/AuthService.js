@@ -1,4 +1,5 @@
 import BaseService from "./BaseService";
+import { token } from "../stores/auth.js";
 
 export default class AuthService extends BaseService {
   constructor(baseUrl) {
@@ -20,9 +21,14 @@ export default class AuthService extends BaseService {
       throw new Error(dataRes.error || "Connection Error");
     }
 
-    const token = dataRes.token;
+    const newToken = dataRes.token;
+    if (!newToken) {
+      throw new Error("Token manquant dans la réponse");
+    }
 
-    document.cookie = `token=${token}; path=/; max-age=3600; secure; samesite=lax`;
+    token.set(newToken);
+    document.cookie = `token=${newToken}; path=/; max-age=3600; secure; samesite=lax`;
+
     return dataRes;
   }
 }
