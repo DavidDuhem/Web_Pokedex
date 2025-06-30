@@ -7,11 +7,11 @@ const pokemonController = new PokemonController();
 
 router.get(
   "/",
-  cw((req, res) => pokemonController.getAll(req, res))
+  cw((req, res) => pokemonController.getAllPokemonsWithTypes(req, res))
 );
 router.get(
   "/:id",
-  cw((req, res, next) => pokemonController.getPokemonsWithTypes(req, res, next))
+  cw((req, res, next) => pokemonController.getPokemonWithTypes(req, res, next))
 );
 
 export default router;

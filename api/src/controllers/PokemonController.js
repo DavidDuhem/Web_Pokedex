@@ -7,7 +7,23 @@ export default class PokemonController extends BaseController {
     super(Pokemon, pokemonSchema);
   }
 
-  async getPokemonsWithTypes(req, res) {
+  async getAllPokemonsWithTypes(req, res) {
+    try {
+      const pokemons = await Pokemon.findAll({
+        include: {
+          model: PokeType,
+          as: "types",
+          through: { attributes: [] },
+        },
+      });
+
+      res.json(pokemons);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  async getPokemonWithTypes(req, res) {
     const pokemonId = parseInt(req.params.id);
     try {
       const pokemon = await Pokemon.findByPk(pokemonId, {
