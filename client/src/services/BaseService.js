@@ -28,7 +28,10 @@ export default class BaseService {
   async create(data, fetchFn = fetch) {
     const res = await fetchFn(`${this.baseUrl}/${this.endpoint}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${get(token)}`,
+      },
       body: JSON.stringify(data),
     });
     if (!res.ok) {
@@ -60,7 +63,10 @@ export default class BaseService {
   async update(id, data, fetchFn = fetch) {
     const res = await fetchFn(`${this.baseUrl}/${this.endpoint}/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${get(token)}`,
+      },
       body: JSON.stringify(data),
     });
 

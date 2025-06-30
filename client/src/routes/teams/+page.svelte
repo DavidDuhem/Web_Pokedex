@@ -50,7 +50,7 @@
       name = "";
       description = "";
     } catch (err) {
-      alert("Erreur lors de la création : " + err.message);
+      alert("Error while creating : " + err.message);
     }
   }
 
