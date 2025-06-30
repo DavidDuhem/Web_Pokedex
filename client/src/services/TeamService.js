@@ -14,12 +14,15 @@ export default class TeamService extends BaseService {
     return res.json();
   }
 
-  async addTeamPokemon(teamId, data, fetchFn = fetch) {
+  async addTeamPokemon(teamId, data, token, fetchFn = fetch) {
     const res = await fetchFn(
       `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(data),
       }
     );
@@ -30,11 +33,14 @@ export default class TeamService extends BaseService {
     return res.json();
   }
 
-  async deleteTeamPokemon(teamId, pokemonId, fetchFn = fetch) {
+  async deleteTeamPokemon(teamId, pokemonId, token, fetchFn = fetch) {
     const res = await fetchFn(
       `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons/${pokemonId}`,
       {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     if (!res.ok)

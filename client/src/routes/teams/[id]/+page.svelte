@@ -1,20 +1,33 @@
 <script>
+  import { onMount } from "svelte";
+  import { getCookie, isTokenValid } from "../../../utils/tokenValidation.js";
+
   import BackButton from "../../../lib/components/basics/BackButton.svelte";
+  import ConnexionButton from "../../../lib/components/basics/ConnexionButton.svelte";
   import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
   import TeamService from "../../../services/TeamService.js";
-  import PopupTeamPokemon from "../../../lib/components/teams/PopupTeamPokemon.svelte";
+  import PopupTeamPokemon from "../../../lib/components/popups/PopupTeamPokemon.svelte";
 
   /** @type {{ data: import('./$types').PageData }} */
 
   export let data;
+
+  let token = null;
+  let isLoggedIn = false;
+
   let showPopup = false;
 
   const teamService = new TeamService();
 
+  onMount(() => {
+    token = getCookie("token");
+    isLoggedIn = isTokenValid(token);
+  });
+
   async function confirmDelete(pokemonId) {
     const id = data.team.id;
     try {
-      await teamService.deleteTeamPokemon(id, pokemonId, fetch);
+      await teamService.deleteTeamPokemon(id, pokemonId, token, fetch);
       data.team.pokemons = data.team.pokemons.filter(
         (pokemon) => pokemon.id !== pokemonId
       );
@@ -26,7 +39,7 @@
   async function confirmAddPokemon(pokemonId) {
     const id = data.team.id;
     try {
-      await teamService.addTeamPokemon(id, { pokemonId }, fetch);
+      await teamService.addTeamPokemon(id, { pokemonId }, token, fetch);
       const newPokemon = data.allPokemons.find(
         (pokemon) => pokemon.id === pokemonId
       );
@@ -44,7 +57,10 @@
   }
 </script>
 
-<BackButton href="/teams" />
+<div class="flex justify-between items-center p-5">
+  <BackButton href="/teams" />
+  <ConnexionButton href="" />
+</div>
 
 {#if data.error}
   <p>Erreur : {data.error}</p>
@@ -102,12 +118,14 @@
                 </p>
               </div>
             </div>
-            <DeleteButton
-              id={pokemon.id}
-              onConfirm={confirmDelete}
-              startText="x"
-              withConfirmation={false}
-            />
+            {#if isLoggedIn}
+              <DeleteButton
+                id={pokemon.id}
+                onConfirm={confirmDelete}
+                startText="x"
+                withConfirmation={false}
+              />
+            {/if}
           </li>
         {/each}
       </ul>

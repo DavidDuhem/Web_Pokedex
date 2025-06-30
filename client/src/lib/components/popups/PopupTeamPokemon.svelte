@@ -1,5 +1,5 @@
 <script>
-  import Popup from "../../../lib/components/popups/Popup.svelte";
+  import Popup from "./Popup.svelte";
 
   export let showPopup;
   export let onClose;
