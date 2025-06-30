@@ -48,11 +48,6 @@
   }
 </script>
 
-<!-- <div class="flex justify-between items-center p-5">
-  <BackButton href="/teams" />
-  <ConnexionButton />
-</div> -->
-
 {#if data.error}
   <p>Erreur : {data.error}</p>
 {:else if !data.team}

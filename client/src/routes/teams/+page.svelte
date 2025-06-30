@@ -105,8 +105,6 @@
   }
 </script>
 
-<!-- <BackButton href="/" /> -->
-
 <div class="max-w-4xl mx-auto mt-8 px-4">
   <h1 class="text-3xl font-bold text-red-600 mb-4">Mes Équipes</h1>
 
