@@ -4,50 +4,58 @@
   const pokemon = data.pokemon;
 </script>
 
-<div class="max-w-4xl mx-auto p-6">
-  <h1 class="text-3xl font-bold mb-4 capitalize">
-    {pokemon.name} (#{pokemon.id})
-  </h1>
+<div class="max-w-4xl mx-auto mt-25 px-4">
+  <h1 class="text-3xl font-bold text-red-600 mb-4">Détails du Pokémon</h1>
 
-  <img
-    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
-    alt={pokemon.name}
-    class="w-64 h-64 mx-auto mb-6"
-  />
+  {#if !pokemon}
+    <p class="text-red-600 mt-10 text-center text-lg">Aucun Pokémon trouvé.</p>
+  {:else}
+    <div
+      class="max-w-4xl mx-auto mt-15 p-6 bg-white rounded-xl shadow-md border border-red-200"
+    >
+      <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+        <img
+          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
+          alt={pokemon.name}
+          class="w-40 h-40 object-contain rounded-lg border-2 border-red-500"
+        />
 
-  <div class="flex flex-wrap gap-2 justify-center mb-6">
-    {#each pokemon.types as type}
-      <span class="bg-gray-200 rounded-full px-3 py-1 text-sm capitalize">
-        {type.type.name}
-      </span>
-    {/each}
-  </div>
+        <div class="flex-1">
+          <h2 class="text-3xl font-bold text-red-600 capitalize mb-4">
+            {pokemon.name}
+            <span class="text-black font-bold">#{pokemon.id}</span>
+          </h2>
 
-  <h2 class="text-xl font-semibold mb-2">Stats</h2>
-  <ul class="mb-6">
-    <li>
-      <span class="capitalize">HP : </span>
-      {pokemon.hp}
-    </li>
-    <li>
-      <span class="capitalize">ATK : </span>
-      {pokemon.atk}
-    </li>
-    <li>
-      <span class="capitalize">DEF : </span>
-      {pokemon.def}
-    </li>
-    <li>
-      <span class="capitalize">ATK_SPE : </span>
-      {pokemon.atk_spe}
-    </li>
-    <li>
-      <span class="capitalize">DEF_SPE : </span>
-      {pokemon.def_spe}
-    </li>
-    <li>
-      <span class="capitalize">SPEED : </span>
-      {pokemon.speed}
-    </li>
-  </ul>
+          <div class="flex flex-wrap gap-2 mb-6">
+            {#each pokemon.types as type}
+              <a href={`/types/${type.id}`}>
+                <span
+                  style="background-color: #{type.color}"
+                  class="text-black rounded-full px-4 py-1 text-sm font-semibold capitalize select-none"
+                >
+                  {type.name}
+                </span>
+              </a>
+            {/each}
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3 text-red-600">Stats</h3>
+          <ul class="grid grid-cols-2 gap-4 text-gray-700 max-w-sm">
+            <li><span class="font-semibold">HP :</span> {pokemon.hp}</li>
+            <li><span class="font-semibold">ATK :</span> {pokemon.atk}</li>
+            <li><span class="font-semibold">DEF :</span> {pokemon.def}</li>
+            <li>
+              <span class="font-semibold">ATK SPE :</span>
+              {pokemon.atk_spe}
+            </li>
+            <li>
+              <span class="font-semibold">DEF SPE :</span>
+              {pokemon.def_spe}
+            </li>
+            <li><span class="font-semibold">SPEED :</span> {pokemon.speed}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  {/if}
 </div>
