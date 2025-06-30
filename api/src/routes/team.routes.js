@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { controllerWrapper as cw } from "../utils/controllerWrapper.js";
 import TeamController from "../controllers/TeamController.js";
+import { verifyToken } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 const teamController = new TeamController();
@@ -17,14 +18,17 @@ router.get(
 );
 router.post(
   "/",
+  verifyToken,
   cw((req, res, next) => teamController.create(req, res, next))
 );
 router.patch(
   "/:id",
+  verifyToken,
   cw((req, res, next) => teamController.update(req, res, next))
 );
 router.delete(
   "/:id",
+  verifyToken,
   cw((req, res, next) => teamController.delete(req, res, next))
 );
 
@@ -36,10 +40,12 @@ router.get(
 );
 router.post(
   "/:id/pokemons",
+  verifyToken,
   cw((req, res, next) => teamController.addPokemonToTeam(req, res, next))
 );
 router.delete(
   "/:id/pokemons/:pokemonId",
+  verifyToken,
   cw((req, res, next) => teamController.removePokemonFromTeam(req, res, next))
 );
 
