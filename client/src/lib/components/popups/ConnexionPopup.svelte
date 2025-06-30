@@ -12,10 +12,9 @@
   let password = "";
 
   async function tryValidate() {
-    onValidate();
-
     try {
       await authService.login({ username, password }, fetch);
+      onValidate();
     } catch (err) {
       alert("Error while loging : " + err.message);
     }

@@ -23,6 +23,6 @@ export default class AuthService extends BaseService {
     const token = dataRes.token;
 
     document.cookie = `token=${token}; path=/; max-age=3600; secure; samesite=lax`;
-    return res.json();
+    return dataRes;
   }
 }

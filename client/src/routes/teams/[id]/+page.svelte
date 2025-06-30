@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { getCookie, isTokenValid } from "../../../utils/tokenValidation.js";
+  import { isLoggedIn, token } from "../../../stores/auth.js";
 
   import BackButton from "../../../lib/components/basics/BackButton.svelte";
   import ConnexionButton from "../../../lib/components/basics/ConnexionButton.svelte";
@@ -12,17 +12,16 @@
 
   export let data;
 
-  let token = null;
-  let isLoggedIn = false;
+  // let token = null;
 
   let showPopup = false;
 
   const teamService = new TeamService();
 
-  onMount(() => {
-    token = getCookie("token");
-    isLoggedIn = isTokenValid(token);
-  });
+  // onMount(() => {
+  //   token = getCookie("token");
+  //   isLoggedIn.set(isTokenValid(token));
+  // });
 
   async function confirmDelete(pokemonId) {
     const id = data.team.id;
@@ -59,7 +58,7 @@
 
 <div class="flex justify-between items-center p-5">
   <BackButton href="/teams" />
-  <ConnexionButton href="" />
+  <ConnexionButton />
 </div>
 
 {#if data.error}
@@ -118,7 +117,7 @@
                 </p>
               </div>
             </div>
-            {#if isLoggedIn}
+            {#if $isLoggedIn}
               <DeleteButton
                 id={pokemon.id}
                 onConfirm={confirmDelete}
