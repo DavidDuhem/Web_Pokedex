@@ -23,11 +23,29 @@ export default class AuthService extends BaseService {
 
     const newToken = dataRes.token;
     if (!newToken) {
-      throw new Error("Token manquant dans la réponse");
+      throw new Error("Missing token is response");
     }
 
     token.set(newToken);
     document.cookie = `token=${newToken}; path=/; max-age=3600; secure; samesite=lax`;
+
+    return dataRes;
+  }
+
+  async register(data, fetchFn = fetch) {
+    const res = await fetchFn(`${this.baseUrl}/${this.endpoint}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const dataRes = await res.json();
+
+    if (!res.ok) {
+      throw new Error(dataRes.error || "Connection Error");
+    }
 
     return dataRes;
   }

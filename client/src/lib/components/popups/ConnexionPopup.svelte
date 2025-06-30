@@ -6,27 +6,38 @@
 
   export let showPopup;
   export let onClose;
-  export let onValidate;
+  export let onLoginValidate;
+  export let onRegisterValidate;
 
   let username = "";
   let password = "";
 
-  async function tryValidate() {
+  let confirmationRegister = false;
+
+  async function trylogin() {
+    confirmationRegister = false;
     try {
       await authService.login({ username, password }, fetch);
-      onValidate();
+      onLoginValidate();
     } catch (err) {
       alert("Error while loging : " + err.message);
+    }
+  }
+
+  async function tryRegister() {
+    try {
+      await authService.register({ username, password }, fetch);
+      onRegisterValidate();
+      confirmationRegister = true;
+    } catch (err) {
+      alert("Error while registering : " + err.message);
     }
   }
 </script>
 
 {#if showPopup}
   <Popup title="Connexion" {onClose}>
-    <form
-      class="flex flex-col gap-4 p-4"
-      on:submit|preventDefault={tryValidate}
-    >
+    <form class="flex flex-col gap-4 p-4">
       <div>
         <label
           for="username"
@@ -56,11 +67,23 @@
           required
         />
       </div>
+      {#if confirmationRegister}
+        <p class="text-green-600">
+          Inscription réalisée avec succès. Vous pouvez maintenant vous
+          connecter
+        </p>
+      {/if}
       <button
         class="bg-green-600 text-white px-4 py-2 mt-5 rounded hover:bg-green-700 transition"
-        on:click={() => tryValidate()}
+        on:click={() => trylogin()}
       >
         Connexion
+      </button>
+      <button
+        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+        on:click={() => tryRegister()}
+      >
+        Inscription
       </button>
     </form>
   </Popup>

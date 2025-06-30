@@ -9,6 +9,9 @@
     showPopup = false;
     isLoggedIn.set(true);
   }
+  async function confirmRegister() {
+    // display thing to notigy register success
+  }
 
   async function disconnect() {
     token.set(null);
@@ -30,7 +33,8 @@
   <ConnexionPopup
     {showPopup}
     onClose={() => (showPopup = false)}
-    onValidate={confirmConnexion}
+    onLoginValidate={confirmConnexion}
+    onRegisterValidate={confirmRegister}
   />
 {:else}
   <button
