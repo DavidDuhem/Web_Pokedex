@@ -3,6 +3,7 @@
   import BackButton from "../../lib/components/basics/BackButton.svelte";
   import TeamTable from "../../lib/components/teams/TeamTable.svelte";
   import TeamForm from "../../lib/components/teams/TeamForm.svelte";
+  import { ssrImportKey } from "vite/module-runner";
 
   /** @type {{ data: import('./$types').PageData }} */
   export let data;

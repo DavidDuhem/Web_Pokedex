@@ -13,11 +13,6 @@
   export let startDelete;
   export let cancelDelete;
   export let confirmDelete;
-
-  console.log(
-    "confirmDelete est une fonction ?",
-    typeof confirmDelete === "function"
-  );
 </script>
 
 <div class="rounded-xl shadow-md w-full max-w-4xl mx-auto">
@@ -70,11 +65,57 @@
           <td class="px-4 py-3 text-right">
             <div class="flex flex-wrap justify-center gap-2">
               {#if $isLoggedIn}
-                <DeleteButton
-                  id={team.id}
-                  onConfirm={confirmDelete}
-                  withConfirmation={true}
-                />
+                {#if editingId === team.id}
+                  <button
+                    class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+                    onclick={() => confirmEdit(team.id)}
+                  >
+                    Enregistrer
+                  </button>
+                  <button
+                    class="bg-gray-400 text-black px-3 py-1 rounded hover:bg-gray-500 transition"
+                    onclick={() => cancelEdit(team.id)}
+                  >
+                    Annuler
+                  </button>
+                {/if}
+                {#if editingId !== team.id && deletingId !== team.id}
+                  <button
+                    onclick={() => startEdit(team)}
+                    class="bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition"
+                  >
+                    Modifier
+                  </button>
+                {/if}
+                {#if deletingId === team.id}
+                  <button
+                    class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+                    onclick={() => confirmDelete(team.id)}
+                  >
+                    Valider
+                  </button>
+                  <button
+                    class="bg-gray-400 text-black px-3 py-1 rounded hover:bg-gray-500 transition"
+                    onclick={cancelDelete}
+                  >
+                    Annuler
+                  </button>
+                {/if}
+                {#if deletingId !== team.id && editingId !== team.id}
+                  <button
+                    onclick={() => startDelete(team.id)}
+                    class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
+                  >
+                    Supprimer
+                  </button>
+                {/if}
+                <!-- {#if deletingId !== team.id && editingId !== team.id}
+                  <DeleteButton
+                    id={team.id}
+                    onConfirm={confirmDelete}
+                    withConfirmation={true}
+                  />
+                {/if} -->
               {:else}
                 <p>Connexion Requise</p>
               {/if}
