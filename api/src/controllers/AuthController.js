@@ -1,37 +1,45 @@
 import { User, sequelize } from "../models/index.js";
 import BaseController from "./BaseController.js";
-import authSchema from "../schemas/auth.schema.js"; // Does nothing because no need to add pokemons
+import authSchema from "../schemas/auth.schema.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-class AuthController extends BaseController {
+export default class AuthController extends BaseController {
   constructor() {
     super(User, authSchema);
   }
 
   async register(req, res) {
+    console.log("1");
     try {
-      if (this.authSchema) {
-        const { error } = this.authSchema.validate(req.body);
+      if (this.schema) {
+        console.log("2");
+        const { error } = this.schema.validate(req.body);
         if (error)
           return res.status(400).json({ error: error.details[0].message });
 
+        console.log("3");
         const { username, password } = req.body;
 
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser)
           return res.status(409).json({ error: "Username already exists" });
 
+        console.log("4");
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
           username: username,
           password: hashedPassword,
         });
 
+        console.log("5");
         return res
           .status(201)
           .json({ message: "User created", userId: user.id });
       }
+      return res
+        .status(500)
+        .json({ error: "Internal server error (validation issue)" });
     } catch (err) {
       return res.status(500).json({ error: "Internal server error" });
     }
@@ -59,4 +67,3 @@ class AuthController extends BaseController {
     }
   }
 }
-export default new AuthController();
