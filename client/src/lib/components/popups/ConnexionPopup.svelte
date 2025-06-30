@@ -13,18 +13,23 @@
   let password = "";
 
   let confirmationRegister = false;
+  let errorLoging = false;
 
   async function trylogin() {
     confirmationRegister = false;
+    errorLoging = false;
     try {
       await authService.login({ username, password }, fetch);
       onLoginValidate();
     } catch (err) {
-      alert("Error while loging : " + err.message);
+      errorLoging = true;
+      console.log("Error : " + err);
     }
   }
 
   async function tryRegister() {
+    errorLoging = false;
+    confirmationRegister = false;
     try {
       await authService.register({ username, password }, fetch);
       onRegisterValidate();
@@ -72,6 +77,9 @@
           Inscription réalisée avec succès. Vous pouvez maintenant vous
           connecter
         </p>
+      {/if}
+      {#if errorLoging}
+        <p class="text-red-600">Pseudo ou mot de pass incorrect</p>
       {/if}
       <button
         class="bg-green-600 text-white px-4 py-2 mt-5 rounded hover:bg-green-700 transition"
