@@ -9,9 +9,7 @@
     showPopup = false;
     isLoggedIn.set(true);
   }
-  async function confirmRegister() {
-    // display thing to notigy register success
-  }
+  async function confirmRegister() {}
 
   async function disconnect() {
     token.set(null);

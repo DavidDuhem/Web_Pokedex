@@ -5,9 +5,9 @@
   const authService = new AuthService();
 
   export let showPopup;
-  export let onClose;
   export let onLoginValidate;
   export let onRegisterValidate;
+  export let onClose;
 
   let username = "";
   let password = "";
@@ -38,10 +38,18 @@
       alert("Error while registering : " + err.message);
     }
   }
+
+  function handleClose() {
+    errorLoging = false;
+    confirmationRegister = false;
+    username = "";
+    password = "";
+    onClose();
+  }
 </script>
 
 {#if showPopup}
-  <Popup title="Connexion" {onClose}>
+  <Popup title="Connexion" onClose={handleClose}>
     <form class="flex flex-col gap-4 p-4">
       <div>
         <label
