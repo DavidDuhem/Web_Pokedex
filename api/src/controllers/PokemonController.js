@@ -1,4 +1,11 @@
-import { Pokemon, PokeType, sequelize } from "../models/index.js";
+import {
+  Pokemon,
+  PokeType,
+  Profile,
+  Vote,
+  sequelize,
+} from "../models/index.js";
+
 import BaseController from "./BaseController.js";
 import pokemonSchema from "../schemas/pokemon.schema.js"; // Does nothing because no need to add pokemons
 
@@ -36,7 +43,65 @@ export default class PokemonController extends BaseController {
 
       if (!pokemon) return res.status(404).json({ error: "Pokemon not found" });
 
-      res.json(pokemon);
+      const voteCount = await Vote.count({
+        where: { pokemon_id: pokemonId },
+      });
+
+      const pokemonWithVotes = pokemon.toJSON();
+      pokemonWithVotes.voteCount = voteCount;
+
+      res.json(pokemonWithVotes);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  async addVote(req, res) {
+    try {
+      const pokemonId = parseInt(req.params.id);
+      const profileId = req.user.id;
+
+      const pokemon = await Pokemon.findByPk(pokemonId);
+      if (!pokemon) return res.status(404).json({ error: "Pokemon not found" });
+
+      const [vote, created] = await Vote.findOrCreate({
+        where: { profile_id: profileId, pokemon_id: pokemonId },
+      });
+
+      if (!created) {
+        return res
+          .status(400)
+          .json({ error: "You already voted for this pokemon" });
+      }
+
+      res.json({ message: "Vote added" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  async deleteVote(req, res) {
+    try {
+      const pokemonId = parseInt(req.params.id);
+      const profileId = req.user.id;
+
+      const pokemon = await Pokemon.findByPk(pokemonId);
+      if (!pokemon) return res.status(404).json({ error: "Pokemon not found" });
+
+      const voteExist = await Vote.findOne({
+        where: { profile_id: profileId, pokemon_id: pokemonId },
+      });
+
+      if (!voteExist) {
+        return res.json({ message: "You have to vote before removing vote" });
+      }
+
+      const profile = await Profile.findByPk(profileId);
+      if (!profile) return res.status(404).json({ error: "Profile not found" });
+
+      await profile.removeVotedPokemons(pokemon);
+
+      res.json({ message: "Vote removed" });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
