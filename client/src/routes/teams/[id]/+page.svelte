@@ -1,15 +1,18 @@
 <script>
-  import { isLoggedIn, token } from "../../../stores/auth.js";
+  import { isLoggedIn, token } from "$lib/../stores/auth.js";
 
-  import BackButton from "../../../lib/components/basics/BackButton.svelte";
-  import ConnexionButton from "../../../lib/components/basics/ConnexionButton.svelte";
-  import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
-  import TeamService from "../../../services/TeamService.js";
-  import PopupTeamPokemon from "../../../lib/components/popups/PopupTeamPokemon.svelte";
+  import BackButton from "$lib/components/basics/BackButton.svelte";
+  import ConnexionButton from "$lib/components/basics/ConnexionButton.svelte";
+  import DeleteButton from "$lib/components/basics/DeleteButton.svelte";
+  import PopupTeamPokemon from "$lib/components/popups/PopupTeamPokemon.svelte";
+  import TypeTag from "$lib/components/types/TypeTag.svelte";
+  import TeamService from "$lib/../services/TeamService.js";
 
   /** @type {{ data: import('./$types').PageData }} */
 
   export let data;
+
+  const allPokemons = data.allPokemons;
 
   let showPopup = false;
 
@@ -31,7 +34,7 @@
     const id = data.team.id;
     try {
       await teamService.addTeamPokemon(id, { pokemonId }, fetch);
-      const newPokemon = data.allPokemons.find(
+      const newPokemon = allPokemons.find(
         (pokemon) => pokemon.id === pokemonId
       );
       if (newPokemon) {
@@ -92,12 +95,7 @@
               <div class="flex gap-2 mt-2">
                 {#each pokemon.types as type}
                   <a href={`/types/${type.id}`}>
-                    <span
-                      style="background-color: #{type.color}"
-                      class="text-black rounded-full px-4 py-1 text-sm font-semibold capitalize select-none"
-                    >
-                      {type.name}
-                    </span>
+                    <TypeTag {type} />
                   </a>
                 {/each}
               </div>
@@ -168,5 +166,5 @@
   {showPopup}
   onClose={() => (showPopup = false)}
   onValidate={confirmAddPokemon}
-  pokemons={data.allPokemons}
+  pokemons={allPokemons}
 />

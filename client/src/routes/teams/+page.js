@@ -1,4 +1,4 @@
-import TeamService from "../../services/TeamService.js";
+import TeamService from "$lib/../services/TeamService.js";
 
 const service = new TeamService();
 

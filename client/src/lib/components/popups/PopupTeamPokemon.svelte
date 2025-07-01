@@ -9,11 +9,16 @@
   let search = "";
   let pokemonToAddId = null;
 
-  $: filtered = pokemons.filter(
-    (pokemon) =>
-      pokemon.name.toLowerCase().includes(search.toLowerCase()) ||
-      pokemon.id.toString().includes(search)
-  );
+  $: filtered = pokemons.filter((pokemon) => {
+    const loweredSearch = search.toLowerCase();
+    return (
+      pokemon.name.toLowerCase().includes(loweredSearch) ||
+      pokemon.id.toString().includes(search) ||
+      pokemon.types.some((type) =>
+        type.name.toLowerCase().includes(loweredSearch)
+      )
+    );
+  });
 
   function tryValidate(pokemonToAddId) {
     if (pokemonToAddId != null) {
