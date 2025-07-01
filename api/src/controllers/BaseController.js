@@ -79,11 +79,18 @@ export default class BaseController {
         return res.status(404).json({ error: "Not found" });
       }
 
+      const authorized = await this.verifications(req, res, item);
+      if (!authorized) return;
+
       await item.destroy();
       res.status(204).send();
     } catch (err) {
       console.error("Delete error:", err);
       res.status(500).json({ error: err.message });
     }
+  }
+
+  async verifications(req, res, item) {
+    return true;
   }
 }

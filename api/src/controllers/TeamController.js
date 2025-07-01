@@ -85,25 +85,11 @@ export default class TeamController extends BaseController {
     }
   }
 
-  async deleteTeamSecured(req, res) {
-    try {
-      const id = parseInt(req.params.id);
-      const profile_id = req.user.id;
-
-      const team = await Team.findByPk(id);
-
-      if (!team) {
-        return res.status(404).json({ error: "Not found" });
-      }
-
-      if (team.profile_id !== profile_id)
-        return res.status(403).json({ message: "Forbidden Action !" });
-
-      await team.destroy();
-      res.status(204).send();
-    } catch (err) {
-      console.error("Delete error:", err);
-      res.status(500).json({ error: err.message });
+  async verifications(req, res, item) {
+    if (item.profile_id != req.user.id) {
+      res.status(403).json({ error: "Action Forbidden" });
+      return false;
     }
+    return true;
   }
 }
