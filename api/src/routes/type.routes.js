@@ -10,7 +10,7 @@ router.get(
 );
 router.get(
   "/:id",
-  cw((req, res, next) => typeController.getById(req, res, next))
+  cw((req, res, next) => typeController.getTypeWithPokemons(req, res, next))
 );
 
 export default router;
