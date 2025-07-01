@@ -12,6 +12,8 @@
 
   export let data;
 
+  const allPokemons = data.allPokemons;
+
   let showPopup = false;
 
   const teamService = new TeamService();
@@ -32,7 +34,7 @@
     const id = data.team.id;
     try {
       await teamService.addTeamPokemon(id, { pokemonId }, fetch);
-      const newPokemon = data.allPokemons.find(
+      const newPokemon = allPokemons.find(
         (pokemon) => pokemon.id === pokemonId
       );
       if (newPokemon) {
@@ -164,5 +166,5 @@
   {showPopup}
   onClose={() => (showPopup = false)}
   onValidate={confirmAddPokemon}
-  pokemons={data.allPokemons}
+  pokemons={allPokemons}
 />
