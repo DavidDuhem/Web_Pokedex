@@ -43,4 +43,7 @@ PokemonTeam.belongsTo(Pokemon, {
 Auth.hasOne(Profile, { foreignKey: "auth_id" });
 Profile.belongsTo(Auth, { foreignKey: "auth_id" });
 
+Profile.hasMany(Team, { foreignKey: "profile_id" });
+Team.belongsTo(Profile, { foreignKey: "profile_id" });
+
 export { Pokemon, PokeType, Team, PokemonTeam, Auth, Profile };

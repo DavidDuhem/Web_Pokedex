@@ -1596,14 +1596,17 @@ console.log("🚧 Adding Teams ...");
 const ultimateTeam = await Team.create({
   name: "Ultimate Team",
   description: "La meilleure team du monde",
+  profile_id: profile.id,
 });
 const laTeamDeLenfer = await Team.create({
   name: "La Team de l'enfer",
   description: "Le feuuuuu",
+  profile_id: profile.id,
 });
 const squadFofolle = await Team.create({
   name: "Squad fofolle",
   description: "Pour tout gagner",
+  profile_id: profile.id,
 });
 
 console.log("🚧 Adding Pokemons to Teams ...");
@@ -1761,26 +1764,6 @@ await mewtwo.addTypes([psy]);
 await mew.addTypes([psy]);
 
 console.log("🚧 Adding Types to Pokemons ...");
-
-// await ultimateTeam.addPokemons(
-//   [florizarre, dracaufeu, tortank, papilusion, dardargnan, nidoking],
-//   {
-//     through: {},
-//   }
-// );
-// await laTeamDeLenfer.addPokemons(
-//   [dracaufeu, feunard, arcanin, magmar, sulfura],
-//   {
-//     through: {},
-//   }
-// );
-// await squadFofolle.addPokemons(
-//   [mew, mewtwo, dracolosse, sulfura, electhor, artikodin],
-//   {
-//     through: {},
-//   }
-// );
-//
 
 await PokemonTeam.bulkCreate([
   { pokemon_id: 3, team_id: 1 },
