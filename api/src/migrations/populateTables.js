@@ -22,6 +22,16 @@ const profile = await Profile.create({
   auth_id: auth.id,
 });
 
+const auth2 = await Auth.create({
+  email: "david2@test.com",
+  password: hashedPassword,
+});
+
+const profile2 = await Profile.create({
+  username: "David2",
+  auth_id: auth2.id,
+});
+
 console.log("🚧 Adding Pokemons...");
 
 const bulbizarre = await Pokemon.create({
@@ -1606,7 +1616,7 @@ const laTeamDeLenfer = await Team.create({
 const squadFofolle = await Team.create({
   name: "Squad fofolle",
   description: "Pour tout gagner",
-  profile_id: profile.id,
+  profile_id: profile2.id,
 });
 
 console.log("🚧 Adding Pokemons to Teams ...");
