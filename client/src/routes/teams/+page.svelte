@@ -3,6 +3,7 @@
   import BackButton from "$lib/components/basics/BackButton.svelte";
   import TeamTable from "$lib/components/teams/TeamTable.svelte";
   import TeamForm from "$lib/components/teams/TeamForm.svelte";
+  import { getCookie } from "$lib/../utils/tokenValidation.js";
 
   /** @type {{ data: import('./$types').PageData }} */
   export let data;
@@ -41,7 +42,6 @@
 
   async function handleSubmit(event) {
     event.preventDefault();
-
     try {
       const newTeam = await service.create({ name, description }, fetch);
 

@@ -25,18 +25,21 @@ export default class BaseController {
 
   async create(req, res) {
     try {
+      let value = req.body;
+
       if (this.schema) {
-        const { error, value } = this.schema.validate(req.body);
-        if (error) {
-          return res.status(400).json({ error: error.details[0].message });
+        const validation = this.schema.validate(req.body);
+        if (validation.error) {
+          return res
+            .status(400)
+            .json({ error: validation.error.details[0].message });
         }
-        req.body = value;
+        value = validation.value;
       }
 
-      const authorized = await this.verifications(req, res, item);
-      if (!authorized) return;
+      const dataToCreate = { ...value, profile_id: req.user.id };
 
-      const newItem = await this.model.create(req.body);
+      const newItem = await this.model.create(dataToCreate);
       res.status(201).json(newItem);
     } catch (err) {
       console.error("Create error:", err);
