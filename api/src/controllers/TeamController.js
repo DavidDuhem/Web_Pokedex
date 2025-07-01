@@ -42,6 +42,7 @@ export default class TeamController extends BaseController {
         id: team.id,
         name: team.name,
         description: team.description,
+        profile_id: team.profile_id,
         pokemons,
       };
       res.json(teamWithPokemons);

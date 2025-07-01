@@ -14,7 +14,6 @@
   export let data;
 
   const team = data.team;
-  console.log(team);
   const pokemons = data.team.pokemons;
 
   const allPokemons = data.allPokemons;
