@@ -1,5 +1,5 @@
 <script>
-  import { isLoggedIn, token } from "../../../stores/auth.js";
+  import { isLoggedIn, token, userId } from "../../../stores/auth.js";
   import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
 
   export let teams = [];
@@ -64,7 +64,7 @@
           </td>
           <td class="px-4 py-3 text-right">
             <div class="flex flex-wrap justify-center gap-2">
-              {#if $isLoggedIn}
+              {#if $isLoggedIn && team.profile_id === userId}
                 {#if editingId === team.id}
                   <button
                     class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
@@ -117,7 +117,12 @@
                   />
                 {/if} -->
               {:else}
-                <p>Connexion Requise</p>
+                <a
+                  class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-700 transition"
+                  href="/teams/{team.id}"
+                >
+                  Voir</a
+                >
               {/if}
             </div>
           </td>
