@@ -1,5 +1,5 @@
 <script>
-  import { isLoggedIn, token } from "../../../stores/auth.js";
+  import { isLoggedIn, token } from "$lib/../stores/auth.js";
 
   import BackButton from "$lib/components/basics/BackButton.svelte";
   import ConnexionButton from "$lib/components/basics/ConnexionButton.svelte";
