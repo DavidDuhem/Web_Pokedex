@@ -5,10 +5,13 @@ export class Auth extends Model {}
 
 Auth.init(
   {
-    username: {
+    email: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
     },
     password: {
       type: DataTypes.STRING,

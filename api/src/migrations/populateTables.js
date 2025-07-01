@@ -5,15 +5,21 @@ import {
   Team,
   PokemonTeam,
   Auth,
+  Profile,
   sequelize,
 } from "../models/index.js";
 
-console.log("🚧 Creating Test Users ...");
+console.log("🚧 Creating Test Auth & Profile ...");
 
 const hashedPassword = await bcrypt.hash("test", 10);
-const visitor = await Auth.create({
-  username: "test",
+const auth = await Auth.create({
+  email: "david@test.com",
   password: hashedPassword,
+});
+
+const profile = await Profile.create({
+  username: "David",
+  auth_id: auth.id,
 });
 
 console.log("🚧 Adding Pokemons...");
