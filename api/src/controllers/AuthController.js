@@ -39,13 +39,13 @@ export default class AuthController extends BaseController {
         });
 
         console.log("5");
-        return res
-          .status(201)
-          .json({ message: "Account created successfully" });
+        return res.status(201).json({
+          message: "Account created successfully",
+        });
       }
-      return res
-        .status(500)
-        .json({ error: "Internal server error (validation issue)" });
+      return res.status(500).json({
+        error: "Internal server error (validation issue)",
+      });
     } catch (err) {
       return res.status(500).json({ error: "Internal server error" });
     }
@@ -55,17 +55,25 @@ export default class AuthController extends BaseController {
     try {
       const { email, password } = req.body;
 
-      const user = await Auth.findOne({ where: { email } });
-      if (!user) return res.status(401).json({ error: "Invalid credentials" });
+      const auth = await Auth.findOne({ where: { email } });
+      if (!auth) return res.status(401).json({ error: "Invalid credentials" });
 
-      const match = await bcrypt.compare(password, user.password);
+      const match = await bcrypt.compare(password, auth.password);
       if (!match) return res.status(401).json({ error: "Invalid credentials" });
 
-      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ id: auth.id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
 
-      return res.json({ message: "Logged in", token });
+      const profile = await Profile.findOne({ where: { auth_id: auth.id } });
+
+      return res.json({
+        message: "Logged in",
+        token,
+        profile: {
+          id: profile.id,
+        },
+      });
     } catch (err) {
       return res.status(500).json({ error: "Internal server error" });
     }
