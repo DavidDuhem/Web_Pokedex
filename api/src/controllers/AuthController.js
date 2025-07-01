@@ -1,4 +1,4 @@
-import { User, sequelize } from "../models/index.js";
+import { Auth, sequelize } from "../models/index.js";
 import BaseController from "./BaseController.js";
 import authSchema from "../schemas/auth.schema.js";
 import jwt from "jsonwebtoken";
@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 
 export default class AuthController extends BaseController {
   constructor() {
-    super(User, authSchema);
+    super(Auth, authSchema);
   }
 
   async register(req, res) {
@@ -21,13 +21,13 @@ export default class AuthController extends BaseController {
         console.log("3");
         const { username, password } = req.body;
 
-        const existingUser = await User.findOne({ where: { username } });
+        const existingUser = await Auth.findOne({ where: { username } });
         if (existingUser)
           return res.status(409).json({ error: "Username already exists" });
 
         console.log("4");
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({
+        const user = await Auth.create({
           username: username,
           password: hashedPassword,
         });
@@ -49,7 +49,7 @@ export default class AuthController extends BaseController {
     try {
       const { username, password } = req.body;
 
-      const user = await User.findOne({ where: { username } });
+      const user = await Auth.findOne({ where: { username } });
       if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
       const match = await bcrypt.compare(password, user.password);

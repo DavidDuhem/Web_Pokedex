@@ -1,4 +1,4 @@
 import { Pokemon, PokeType, PokemonTeam, Team } from "./associations.js";
-import { User } from "./User.js";
+import { Auth } from "./Auth.js";
 import { sequelize } from "./dbClientSequelize.js";
-export { Pokemon, PokeType, Team, PokemonTeam, User, sequelize };
+export { Pokemon, PokeType, Team, PokemonTeam, Auth, sequelize };

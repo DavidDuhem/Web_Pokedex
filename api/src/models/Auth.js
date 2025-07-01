@@ -1,9 +1,9 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./dbClientSequelize.js";
 
-export class User extends Model {}
+export class Auth extends Model {}
 
-User.init(
+Auth.init(
   {
     username: {
       type: DataTypes.STRING,
@@ -17,6 +17,6 @@ User.init(
   },
   {
     sequelize,
-    tableName: "pokeuser",
+    tableName: "auth",
   }
 );

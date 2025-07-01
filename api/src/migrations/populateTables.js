@@ -4,14 +4,14 @@ import {
   PokeType,
   Team,
   PokemonTeam,
-  User,
+  Auth,
   sequelize,
 } from "../models/index.js";
 
 console.log("🚧 Creating Test Users ...");
 
 const hashedPassword = await bcrypt.hash("test", 10);
-const visitor = await User.create({
+const visitor = await Auth.create({
   username: "test",
   password: hashedPassword,
 });
