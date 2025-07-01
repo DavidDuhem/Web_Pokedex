@@ -6,6 +6,7 @@
   import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
   import TeamService from "../../../services/TeamService.js";
   import PopupTeamPokemon from "../../../lib/components/popups/PopupTeamPokemon.svelte";
+  import TypeTag from "../../../lib/components/types/TypeTag.svelte";
 
   /** @type {{ data: import('./$types').PageData }} */
 
@@ -92,12 +93,7 @@
               <div class="flex gap-2 mt-2">
                 {#each pokemon.types as type}
                   <a href={`/types/${type.id}`}>
-                    <span
-                      style="background-color: #{type.color}"
-                      class="text-black rounded-full px-4 py-1 text-sm font-semibold capitalize select-none"
-                    >
-                      {type.name}
-                    </span>
+                    <TypeTag {type} />
                   </a>
                 {/each}
               </div>
