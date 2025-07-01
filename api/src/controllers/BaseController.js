@@ -32,6 +32,10 @@ export default class BaseController {
         }
         req.body = value;
       }
+
+      const authorized = await this.verifications(req, res, item);
+      if (!authorized) return;
+
       const newItem = await this.model.create(req.body);
       res.status(201).json(newItem);
     } catch (err) {
