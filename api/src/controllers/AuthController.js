@@ -1,4 +1,4 @@
-import { Auth, sequelize } from "../models/index.js";
+import { Auth, Profile, sequelize } from "../models/index.js";
 import BaseController from "./BaseController.js";
 import authSchema from "../schemas/auth.schema.js";
 import jwt from "jsonwebtoken";
@@ -21,21 +21,27 @@ export default class AuthController extends BaseController {
         console.log("3");
         const { email, username, password } = req.body;
 
-        const existingUser = await Auth.findOne({ where: { email } });
-        if (existingUser)
-          return res.status(409).json({ error: "Username already exists" });
+        const existingAuth = await Auth.findOne({ where: { email } });
+        if (existingAuth)
+          return res.status(409).json({ error: "Email already exists" });
 
         console.log("4");
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await Auth.create({
+
+        const auth = await Auth.create({
           email: email,
           password: hashedPassword,
+        });
+
+        await Profile.create({
+          username: username,
+          auth_id: auth.id,
         });
 
         console.log("5");
         return res
           .status(201)
-          .json({ message: "User created", userId: user.id });
+          .json({ message: "Account created successfully" });
       }
       return res
         .status(500)
