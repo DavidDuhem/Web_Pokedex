@@ -1,4 +1,4 @@
-import PokemonService from "../../services/PokemonService.js";
+import PokemonService from "$lib/../services/PokemonService.js";
 
 const service = new PokemonService();
 

@@ -1,5 +1,5 @@
-import TeamService from "../../../services/TeamService.js";
-import PokemonService from "../../../services/PokemonService.js";
+import TeamService from "$lib/../services/TeamService.js";
+import PokemonService from "$lib/../services/PokemonService.js";
 
 const teamService = new TeamService();
 const pokemonService = new PokemonService();

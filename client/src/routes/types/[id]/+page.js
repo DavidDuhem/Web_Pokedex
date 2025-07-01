@@ -1,6 +1,6 @@
 /** @type {import('./$types').PageLoad} */
 
-import TypeService from "../../../services/TypeService.js";
+import TypeService from "$lib/../services/TypeService.js";
 
 const service = new TypeService();
 

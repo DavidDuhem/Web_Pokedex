@@ -1,12 +1,12 @@
 <script>
   import { isLoggedIn, token } from "../../../stores/auth.js";
 
-  import BackButton from "../../../lib/components/basics/BackButton.svelte";
-  import ConnexionButton from "../../../lib/components/basics/ConnexionButton.svelte";
-  import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
-  import TeamService from "../../../services/TeamService.js";
-  import PopupTeamPokemon from "../../../lib/components/popups/PopupTeamPokemon.svelte";
-  import TypeTag from "../../../lib/components/types/TypeTag.svelte";
+  import BackButton from "$lib/components/basics/BackButton.svelte";
+  import ConnexionButton from "$lib/components/basics/ConnexionButton.svelte";
+  import DeleteButton from "$lib/components/basics/DeleteButton.svelte";
+  import PopupTeamPokemon from "$lib/components/popups/PopupTeamPokemon.svelte";
+  import TypeTag from "$lib/components/types/TypeTag.svelte";
+  import TeamService from "$lib/../services/TeamService.js";
 
   /** @type {{ data: import('./$types').PageData }} */
 
