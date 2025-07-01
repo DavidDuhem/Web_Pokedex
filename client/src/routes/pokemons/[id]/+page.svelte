@@ -28,7 +28,7 @@
 
           <div class="flex flex-wrap gap-2 mb-6">
             {#each pokemon.types as type}
-              <a href={`/types/${type.id}`}>
+              <a href={`/types/${type.id}?from=/pokemons/${pokemon.id}`}>
                 <span
                   style="background-color: #{type.color}"
                   class="text-black rounded-full px-4 py-1 text-sm font-semibold capitalize select-none"

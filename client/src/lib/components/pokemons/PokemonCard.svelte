@@ -1,9 +1,10 @@
 <script>
   export let pokemon;
+  export let fromUrl = "";
 </script>
 
 <a
-  href={`/pokemons/${pokemon.id}`}
+  href={`/pokemons/${pokemon.id}${fromUrl !== "" ? "?from=" + fromUrl : ""}`}
   class="border rounded p-2 flex flex-col items-center hover:shadow-lg transition cursor-pointer hover:bg-gray-200"
 >
   <span class="text-sm text-gray-500">ID: {pokemon.id}</span>

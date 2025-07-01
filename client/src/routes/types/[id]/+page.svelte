@@ -18,6 +18,6 @@
       </h1>
       <TypeTag {type} />
     </div>
-    <PokemonCardTable pokemons={type.pokemons} />
+    <PokemonCardTable pokemons={type.pokemons} fromUrl={`/types/${type.id}`} />
   </div>
 {/if}
