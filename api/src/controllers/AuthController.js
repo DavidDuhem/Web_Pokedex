@@ -19,16 +19,16 @@ export default class AuthController extends BaseController {
           return res.status(400).json({ error: error.details[0].message });
 
         console.log("3");
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        const existingUser = await Auth.findOne({ where: { username } });
+        const existingUser = await Auth.findOne({ where: { email } });
         if (existingUser)
           return res.status(409).json({ error: "Username already exists" });
 
         console.log("4");
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await Auth.create({
-          username: username,
+          email: email,
           password: hashedPassword,
         });
 
@@ -47,19 +47,17 @@ export default class AuthController extends BaseController {
 
   async login(req, res) {
     try {
-      const { username, password } = req.body;
+      const { email, password } = req.body;
 
-      const user = await Auth.findOne({ where: { username } });
+      const user = await Auth.findOne({ where: { email } });
       if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) return res.status(401).json({ error: "Invalid credentials" });
 
-      const token = jwt.sign(
-        { id: user.id, username: user.username },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
 
       return res.json({ message: "Logged in", token });
     } catch (err) {
