@@ -29,7 +29,7 @@ router.patch(
 router.delete(
   "/:id",
   verifyToken,
-  cw((req, res, next) => teamController.delete(req, res, next))
+  cw((req, res, next) => teamController.deleteTeamSecured(req, res, next))
 );
 
 // Pokemons in Team Management

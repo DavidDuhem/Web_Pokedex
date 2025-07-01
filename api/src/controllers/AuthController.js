@@ -61,11 +61,15 @@ export default class AuthController extends BaseController {
       const match = await bcrypt.compare(password, auth.password);
       if (!match) return res.status(401).json({ error: "Invalid credentials" });
 
-      const token = jwt.sign({ id: auth.id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-
       const profile = await Profile.findOne({ where: { auth_id: auth.id } });
+
+      const token = jwt.sign(
+        { id: auth.id, profile_id: profile.id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
 
       return res.json({
         message: "Logged in",

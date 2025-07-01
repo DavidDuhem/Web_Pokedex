@@ -72,6 +72,7 @@ export default class BaseController {
   async delete(req, res) {
     try {
       const id = parseInt(req.params.id);
+
       const item = await this.model.findByPk(id);
 
       if (!item) {
