@@ -61,6 +61,9 @@ export default class BaseController {
         req.body = value;
       }
 
+      const authorized = await this.verifications(req, res, item);
+      if (!authorized) return;
+
       await item.update(req.body);
       res.json(item);
     } catch (err) {
