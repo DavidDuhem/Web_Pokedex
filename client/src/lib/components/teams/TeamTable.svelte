@@ -71,46 +71,52 @@
               {#if $isLoggedIn && profileId === team.profile_id}
                 {#if editingId === team.id}
                   <button
-                    class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+                    class="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700 transition"
                     onclick={() => confirmEdit(team.id)}
                   >
-                    Enregistrer
+                    ✅
                   </button>
                   <button
-                    class="bg-gray-400 text-black px-3 py-1 rounded hover:bg-gray-500 transition"
+                    class="bg-gray-400 text-black px-2 py-1 rounded hover:bg-gray-500 transition"
                     onclick={() => cancelEdit(team.id)}
                   >
-                    Annuler
+                    ✖️
                   </button>
                 {/if}
                 {#if editingId !== team.id && deletingId !== team.id}
+                  <a
+                    class="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-700 transition"
+                    href="/teams/{team.id}"
+                  >
+                    👁️</a
+                  >
                   <button
                     onclick={() => startEdit(team)}
-                    class="bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition"
+                    class="bg-red-100 text-red-600 px-2 py-1 rounded hover:bg-red-200 transition"
                   >
-                    Modifier
+                    📝
                   </button>
                 {/if}
                 {#if deletingId === team.id}
                   <button
-                    class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+                    class="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700 transition"
                     onclick={() => confirmDelete(team.id)}
                   >
-                    Valider
+                    ✅
                   </button>
                   <button
-                    class="bg-gray-400 text-black px-3 py-1 rounded hover:bg-gray-500 transition"
+                    class="bg-gray-400 text-black px-2 py-1 rounded hover:bg-gray-500 transition"
                     onclick={cancelDelete}
                   >
-                    Annuler
+                    ✖️
                   </button>
                 {/if}
                 {#if deletingId !== team.id && editingId !== team.id}
                   <button
                     onclick={() => startDelete(team.id)}
-                    class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
+                    class="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 transition"
                   >
-                    Supprimer
+                    🗑️
                   </button>
                 {/if}
                 <!-- {#if deletingId !== team.id && editingId !== team.id}
@@ -122,10 +128,10 @@
                 {/if} -->
               {:else}
                 <a
-                  class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-700 transition"
+                  class="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-700 transition"
                   href="/teams/{team.id}"
                 >
-                  Voir</a
+                  👁️</a
                 >
               {/if}
             </div>
