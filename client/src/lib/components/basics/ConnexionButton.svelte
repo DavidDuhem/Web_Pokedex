@@ -1,7 +1,7 @@
 <script>
   import ConnexionPopup from "../popups/ConnexionPopup.svelte";
 
-  import { isLoggedIn, token, userId } from "../../../stores/auth.js";
+  import { isLoggedIn, token } from "../../../stores/auth.js";
 
   let showPopup = false;
 
