@@ -19,7 +19,7 @@ export default class AuthController extends BaseController {
           return res.status(400).json({ error: error.details[0].message });
 
         console.log("3");
-        const { email, password } = req.body;
+        const { email, username, password } = req.body;
 
         const existingUser = await Auth.findOne({ where: { email } });
         if (existingUser)
