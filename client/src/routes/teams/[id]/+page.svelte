@@ -22,7 +22,6 @@
 
   const profileCookie = getCookie("profileId");
   let profileId = profileCookie ? parseInt(profileCookie, 10) : null;
-  profileId = 2;
 
   const teamService = new TeamService();
 
