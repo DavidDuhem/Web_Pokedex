@@ -1,6 +1,7 @@
 <script>
-  import { isLoggedIn, token } from "../../../stores/auth.js";
-  import DeleteButton from "../../../lib/components/basics/DeleteButton.svelte";
+  import { isLoggedIn, token } from "$lib/../stores/auth.js";
+  import DeleteButton from "$lib/components/basics/DeleteButton.svelte";
+  import { getCookie } from "$lib/../utils/tokenValidation.js";
 
   export let teams = [];
   export let editingId;
@@ -13,6 +14,9 @@
   export let startDelete;
   export let cancelDelete;
   export let confirmDelete;
+
+  const profileCookie = getCookie("profileId");
+  let profileId = profileCookie ? parseInt(profileCookie, 10) : null;
 </script>
 
 <div class="rounded-xl shadow-md w-full max-w-4xl mx-auto">
@@ -64,7 +68,7 @@
           </td>
           <td class="px-4 py-3 text-right">
             <div class="flex flex-wrap justify-center gap-2">
-              {#if $isLoggedIn}
+              {#if $isLoggedIn && profileId === team.profile_id}
                 {#if editingId === team.id}
                   <button
                     class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
@@ -117,7 +121,12 @@
                   />
                 {/if} -->
               {:else}
-                <p>Connexion Requise</p>
+                <a
+                  class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-700 transition"
+                  href="/teams/{team.id}"
+                >
+                  Voir</a
+                >
               {/if}
             </div>
           </td>

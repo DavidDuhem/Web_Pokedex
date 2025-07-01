@@ -4,16 +4,32 @@ import {
   PokeType,
   Team,
   PokemonTeam,
-  User,
+  Auth,
+  Profile,
   sequelize,
 } from "../models/index.js";
 
-console.log("🚧 Creating Test Users ...");
+console.log("🚧 Creating Test Auth & Profile ...");
 
 const hashedPassword = await bcrypt.hash("test", 10);
-const visitor = await User.create({
-  username: "test",
+const auth = await Auth.create({
+  email: "david@test.com",
   password: hashedPassword,
+});
+
+const profile = await Profile.create({
+  username: "David",
+  auth_id: auth.id,
+});
+
+const auth2 = await Auth.create({
+  email: "david2@test.com",
+  password: hashedPassword,
+});
+
+const profile2 = await Profile.create({
+  username: "David2",
+  auth_id: auth2.id,
 });
 
 console.log("🚧 Adding Pokemons...");
@@ -1590,14 +1606,17 @@ console.log("🚧 Adding Teams ...");
 const ultimateTeam = await Team.create({
   name: "Ultimate Team",
   description: "La meilleure team du monde",
+  profile_id: profile.id,
 });
 const laTeamDeLenfer = await Team.create({
   name: "La Team de l'enfer",
   description: "Le feuuuuu",
+  profile_id: profile.id,
 });
 const squadFofolle = await Team.create({
   name: "Squad fofolle",
   description: "Pour tout gagner",
+  profile_id: profile2.id,
 });
 
 console.log("🚧 Adding Pokemons to Teams ...");
@@ -1755,26 +1774,6 @@ await mewtwo.addTypes([psy]);
 await mew.addTypes([psy]);
 
 console.log("🚧 Adding Types to Pokemons ...");
-
-// await ultimateTeam.addPokemons(
-//   [florizarre, dracaufeu, tortank, papilusion, dardargnan, nidoking],
-//   {
-//     through: {},
-//   }
-// );
-// await laTeamDeLenfer.addPokemons(
-//   [dracaufeu, feunard, arcanin, magmar, sulfura],
-//   {
-//     through: {},
-//   }
-// );
-// await squadFofolle.addPokemons(
-//   [mew, mewtwo, dracolosse, sulfura, electhor, artikodin],
-//   {
-//     through: {},
-//   }
-// );
-//
 
 await PokemonTeam.bulkCreate([
   { pokemon_id: 3, team_id: 1 },

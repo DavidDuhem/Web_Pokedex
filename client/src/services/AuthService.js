@@ -27,6 +27,7 @@ export default class AuthService extends BaseService {
     }
 
     token.set(newToken);
+    document.cookie = `profileId=${dataRes.profile.id}; path=/; max-age=3600; secure; samesite=lax`;
     document.cookie = `token=${newToken}; path=/; max-age=3600; secure; samesite=lax`;
 
     return dataRes;

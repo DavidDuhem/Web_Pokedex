@@ -1,6 +1,8 @@
 import { Pokemon } from "./Pokemon.js";
 import { PokeType } from "./PokeType.js";
 import { PokemonTeam } from "./PokemonTeam.js";
+import { Auth } from "./Auth.js";
+import { Profile } from "./Profile.js";
 import { Team } from "./Team.js";
 
 Pokemon.belongsToMany(PokeType, {
@@ -38,4 +40,10 @@ PokemonTeam.belongsTo(Pokemon, {
   as: "pokemon",
 });
 
-export { Pokemon, PokeType, Team, PokemonTeam };
+Auth.hasOne(Profile, { foreignKey: "auth_id" });
+Profile.belongsTo(Auth, { foreignKey: "auth_id" });
+
+Profile.hasMany(Team, { foreignKey: "profile_id" });
+Team.belongsTo(Profile, { foreignKey: "profile_id" });
+
+export { Pokemon, PokeType, Team, PokemonTeam, Auth, Profile };

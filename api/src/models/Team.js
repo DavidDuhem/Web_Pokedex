@@ -18,6 +18,15 @@ Team.init(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    profile_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "profile",
+        key: "id",
+      },
+      onDelete: "CASCADE",
+    },
   },
   {
     sequelize,

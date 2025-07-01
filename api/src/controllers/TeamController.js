@@ -84,4 +84,12 @@ export default class TeamController extends BaseController {
       res.status(500).json({ error: err.message });
     }
   }
+
+  async verifications(req, res, item) {
+    if (item.profile_id != req.user.id) {
+      res.status(403).json({ error: "Action Forbidden" });
+      return false;
+    }
+    return true;
+  }
 }

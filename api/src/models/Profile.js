@@ -1,22 +1,27 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./dbClientSequelize.js";
 
-export class User extends Model {}
+export class Profile extends Model {}
 
-User.init(
+Profile.init(
   {
     username: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
     },
-    password: {
-      type: DataTypes.STRING,
+    auth_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "auth",
+        key: "id",
+      },
+      onDelete: "CASCADE",
     },
   },
   {
     sequelize,
-    tableName: "pokeuser",
+    tableName: "profile",
   }
 );

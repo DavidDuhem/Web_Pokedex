@@ -25,14 +25,21 @@ export default class BaseController {
 
   async create(req, res) {
     try {
+      let value = req.body;
+
       if (this.schema) {
-        const { error, value } = this.schema.validate(req.body);
-        if (error) {
-          return res.status(400).json({ error: error.details[0].message });
+        const validation = this.schema.validate(req.body);
+        if (validation.error) {
+          return res
+            .status(400)
+            .json({ error: validation.error.details[0].message });
         }
-        req.body = value;
+        value = validation.value;
       }
-      const newItem = await this.model.create(req.body);
+
+      const dataToCreate = { ...value, profile_id: req.user.id };
+
+      const newItem = await this.model.create(dataToCreate);
       res.status(201).json(newItem);
     } catch (err) {
       console.error("Create error:", err);
@@ -61,6 +68,9 @@ export default class BaseController {
         req.body = value;
       }
 
+      const authorized = await this.verifications(req, res, item);
+      if (!authorized) return;
+
       await item.update(req.body);
       res.json(item);
     } catch (err) {
@@ -72,11 +82,15 @@ export default class BaseController {
   async delete(req, res) {
     try {
       const id = parseInt(req.params.id);
+
       const item = await this.model.findByPk(id);
 
       if (!item) {
         return res.status(404).json({ error: "Not found" });
       }
+
+      const authorized = await this.verifications(req, res, item);
+      if (!authorized) return;
 
       await item.destroy();
       res.status(204).send();
@@ -84,5 +98,9 @@ export default class BaseController {
       console.error("Delete error:", err);
       res.status(500).json({ error: err.message });
     }
+  }
+
+  async verifications(req, res, item) {
+    return true;
   }
 }
