@@ -14,17 +14,56 @@ export default class PokemonController extends BaseController {
     super(Pokemon, pokemonSchema);
   }
 
+  // async getAllPokemonsWithTypes(req, res) {
+  //   try {
+  //     const pokemons = await Pokemon.findAll({
+  //       include: {
+  //         model: PokeType,
+  //         as: "types",
+  //         through: { attributes: [] },
+  //       },
+  //     });
+
+  //     res.json(pokemons);
+  //   } catch (err) {
+  //     res.status(500).json({ error: err.message });
+  //   }
+  // }
+
   async getAllPokemonsWithTypes(req, res) {
     try {
-      const pokemons = await Pokemon.findAll({
+      const limit = 20;
+      const offset = (parseInt(req.query.page) - 1) * limit;
+
+      const pokemons = await Pokemon.findAndCountAll({
         include: {
           model: PokeType,
           as: "types",
+          attributes: ["id", "name", "color"],
           through: { attributes: [] },
         },
+        limit,
+        offset,
+        order: [["id", "ASC"]],
+        distinct: true,
+        attributes: [
+          "id",
+          "name",
+          "hp",
+          "atk",
+          "def",
+          "atk_spe",
+          "def_spe",
+          "speed",
+        ],
       });
 
-      res.json(pokemons);
+      res.json({
+        data: pokemons.rows,
+        total: pokemons.count,
+        limit,
+        offset,
+      });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
