@@ -29,9 +29,16 @@
     const id = team.id;
     try {
       await teamService.deleteTeamPokemon(id, pokemonId, fetch);
-      team.pokemons = team.pokemons.filter(
-        (pokemon) => pokemon.id !== pokemonId
+
+      const index = team.pokemons.findIndex(
+        (pokemon) => pokemon.id === pokemonId
       );
+      if (index !== -1) {
+        team.pokemons = [
+          ...team.pokemons.slice(0, index),
+          ...team.pokemons.slice(index + 1),
+        ];
+      }
     } catch (err) {
       alert("Error while deleting : " + err.message);
     }

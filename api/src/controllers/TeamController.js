@@ -94,7 +94,13 @@ export default class TeamController extends BaseController {
       const authorized = await this.verifications(req, res, team);
       if (!authorized) return;
 
-      await team.removePokemon(pokemon);
+      await PokemonTeam.destroy({
+        where: {
+          team_id: teamId,
+          pokemon_id: pokemonId,
+        },
+        limit: 1,
+      });
 
       res.json({ message: "Pokemon removed from team successfully" });
     } catch (err) {

@@ -6,7 +6,7 @@ const service = new TypeService();
 
 export async function load({ fetch }) {
   try {
-    const types = await service.getAll(fetch);
+    const types = await service.getAll("", "", fetch);
     return { types };
   } catch (err) {
     return { types: [], error: err.message || "Erreur inconnue" };
