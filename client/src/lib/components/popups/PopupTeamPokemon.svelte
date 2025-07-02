@@ -9,17 +9,18 @@
   export let onClose;
   export let onValidate;
   export let pokemons = [];
+  export let onPokemonListUpdated;
 
   let search = "";
   let pokemonToAddId = null;
 
   let debounceTimeout;
 
-  // Fonction pour appeler le service
   async function loadPokemons() {
     try {
       const data = await service.getAll("", search);
-      pokemons = data.data; // adapter selon la structure reçue
+      pokemons = data.data;
+      onPokemonListUpdated(pokemons);
       console.log(pokemons);
     } catch (err) {
       console.error("Erreur fetch pokemons:", err);
@@ -27,12 +28,11 @@
     }
   }
 
-  // Déclenche la recherche avec debounce à chaque changement de search
   $: if (search !== undefined) {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
       loadPokemons();
-    }, 300); // délai 300ms
+    }, 300);
   }
 
   onDestroy(() => {

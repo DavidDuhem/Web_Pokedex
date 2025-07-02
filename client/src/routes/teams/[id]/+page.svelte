@@ -16,7 +16,7 @@
   const team = data.team;
   const pokemons = data.team.pokemons;
 
-  const allPokemons = data.allPokemons.data;
+  let allPokemons = data.allPokemons.data;
 
   let showPopup = false;
 
@@ -58,6 +58,10 @@
       alert("Error while adding : " + err.message);
     }
     showPopup = false;
+  }
+
+  function onPokemonListUpdated(newList) {
+    allPokemons = newList;
   }
 
   function handleAddPopup() {
@@ -180,5 +184,6 @@
   {showPopup}
   onClose={() => (showPopup = false)}
   onValidate={confirmAddPokemon}
+  {onPokemonListUpdated}
   pokemons={allPokemons}
 />
