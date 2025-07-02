@@ -4,10 +4,13 @@ const service = new PokemonService();
 
 /** @type {import('./$types').PageLoad} */
 
-export async function load({ fetch }) {
+export async function load({ url, fetch }) {
   try {
-    const pokemons = await service.getAll(fetch);
-    return { pokemons };
+    const page = parseInt(url.searchParams.get("page")) || 1;
+
+    const pokemons = await service.getAll(page, "", fetch);
+
+    return { pokemons, page };
   } catch (err) {
     return { pokemons: [], error: err.message || "Erreur inconnue" };
   }

@@ -6,7 +6,7 @@ const service = new TeamService();
 
 export async function load({ fetch }) {
   try {
-    const teams = await service.getAll(fetch);
+    const teams = await service.getAll("", "", fetch);
     return { teams };
   } catch (err) {
     return { teams: [], error: err.message || "Erreur inconnue" };

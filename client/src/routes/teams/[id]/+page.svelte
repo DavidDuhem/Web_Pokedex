@@ -7,43 +7,61 @@
   import PopupTeamPokemon from "$lib/components/popups/PopupTeamPokemon.svelte";
   import TypeTag from "$lib/components/types/TypeTag.svelte";
   import TeamService from "$lib/../services/TeamService.js";
+  import { getCookie } from "$lib/../utils/tokenValidation.js";
 
   /** @type {{ data: import('./$types').PageData }} */
 
   export let data;
 
-  const allPokemons = data.allPokemons;
+  const team = data.team;
+  const pokemons = data.team.pokemons;
+
+  let allPokemons = data.allPokemons.data;
 
   let showPopup = false;
+
+  const profileCookie = getCookie("profileId");
+  let profileId = profileCookie ? parseInt(profileCookie, 10) : null;
 
   const teamService = new TeamService();
 
   async function confirmDelete(pokemonId) {
-    const id = data.team.id;
+    const id = team.id;
     try {
       await teamService.deleteTeamPokemon(id, pokemonId, fetch);
-      data.team.pokemons = data.team.pokemons.filter(
-        (pokemon) => pokemon.id !== pokemonId
+
+      const index = team.pokemons.findIndex(
+        (pokemon) => pokemon.id === pokemonId
       );
+      if (index !== -1) {
+        team.pokemons = [
+          ...team.pokemons.slice(0, index),
+          ...team.pokemons.slice(index + 1),
+        ];
+      }
     } catch (err) {
       alert("Error while deleting : " + err.message);
     }
   }
 
   async function confirmAddPokemon(pokemonId) {
-    const id = data.team.id;
+    const id = team.id;
     try {
       await teamService.addTeamPokemon(id, { pokemonId }, fetch);
       const newPokemon = allPokemons.find(
         (pokemon) => pokemon.id === pokemonId
       );
       if (newPokemon) {
-        data.team.pokemons = [...data.team.pokemons, newPokemon];
+        team.pokemons = [...team.pokemons, newPokemon];
       }
     } catch (err) {
       alert("Error while adding : " + err.message);
     }
     showPopup = false;
+  }
+
+  function onPokemonListUpdated(newList) {
+    allPokemons = newList;
   }
 
   function handleAddPopup() {
@@ -53,7 +71,7 @@
 
 {#if data.error}
   <p>Erreur : {data.error}</p>
-{:else if !data.team}
+{:else if !team}
   <p>Équipe non trouvée.</p>
 {:else}
   <div
@@ -66,8 +84,8 @@
         class="w-64 h-64 object-cover rounded-lg border-2 border-red-500"
       />
       <div class="flex-1">
-        <h2 class="text-2xl font-bold text-red-600 mb-2">{data.team.name}</h2>
-        <p class="text-gray-700">{data.team.description}</p>
+        <h2 class="text-2xl font-bold text-red-600 mb-2">{team.name}</h2>
+        <p class="text-gray-700">{team.description}</p>
       </div>
     </div>
   </div>
@@ -77,11 +95,11 @@
   >
     <h3 class="text-xl font-bold text-red-600 mb-4">Pokémons de l'équipe</h3>
 
-    {#if data.team.pokemons.length === 0}
+    {#if team.pokemons.length === 0}
       <p class="text-gray-500 italic">Aucun pokémon dans cette équipe.</p>
     {:else}
       <ul class="space-y-4">
-        {#each data.team.pokemons as pokemon}
+        {#each team.pokemons as pokemon}
           <li
             class="flex items-start gap-4 border border-red-100 rounded-lg p-3 hover:bg-red-50 transition"
           >
@@ -118,7 +136,7 @@
                 </p>
               </div>
             </div>
-            {#if $isLoggedIn}
+            {#if $isLoggedIn && profileId && profileId === team.profile_id}
               <DeleteButton
                 id={pokemon.id}
                 onConfirm={confirmDelete}
@@ -130,7 +148,7 @@
         {/each}
       </ul>
     {/if}
-    {#if $isLoggedIn && data.team.pokemons.length < 6}
+    {#if $isLoggedIn && team.pokemons.length < 6 && profileId && profileId === team.profile_id}
       <ul class="space-y-4 mt-4">
         <li
           class="border-2 border-dashed border-red-300 rounded-lg p-0 overflow-hidden"
@@ -166,5 +184,6 @@
   {showPopup}
   onClose={() => (showPopup = false)}
   onValidate={confirmAddPokemon}
+  {onPokemonListUpdated}
   pokemons={allPokemons}
 />

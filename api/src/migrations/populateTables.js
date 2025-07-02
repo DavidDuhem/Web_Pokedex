@@ -6,6 +6,7 @@ import {
   PokemonTeam,
   Auth,
   Profile,
+  Vote,
   sequelize,
 } from "../models/index.js";
 
@@ -1795,6 +1796,20 @@ await PokemonTeam.bulkCreate([
   { pokemon_id: 145, team_id: 3 },
   { pokemon_id: 144, team_id: 3 },
 ]);
+
+console.log("🚧 Adding Votes to Pokemons ...");
+
+await mewtwo.addVoters(profile);
+await mewtwo.addVoters(profile2);
+await mew.addVoters(profile);
+await dracolosse.addVoters(profile2);
+await staross.addVoters(profile);
+await staross.addVoters(profile2);
+await ronflex.addVoters(profile);
+await poissoroy.addVoters(profile);
+await soporifik.addVoters(profile);
+await kokiyas.addVoters(profile);
+await magneti.addVoters(profile2);
 
 console.log("✅ Migration OK ! Closing base ...");
 await sequelize.close();

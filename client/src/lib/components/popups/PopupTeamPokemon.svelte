@@ -1,23 +1,42 @@
 <script>
+  import { onDestroy } from "svelte";
   import Popup from "./Popup.svelte";
+  import PokemonService from "$lib/../services/PokemonService.js";
+
+  const service = new PokemonService();
 
   export let showPopup;
   export let onClose;
   export let onValidate;
   export let pokemons = [];
+  export let onPokemonListUpdated;
 
   let search = "";
   let pokemonToAddId = null;
 
-  $: filtered = pokemons.filter((pokemon) => {
-    const loweredSearch = search.toLowerCase();
-    return (
-      pokemon.name.toLowerCase().includes(loweredSearch) ||
-      pokemon.id.toString().includes(search) ||
-      pokemon.types.some((type) =>
-        type.name.toLowerCase().includes(loweredSearch)
-      )
-    );
+  let debounceTimeout;
+
+  async function loadPokemons() {
+    try {
+      const data = await service.getAll("", search);
+      pokemons = data.data;
+      onPokemonListUpdated(pokemons);
+      console.log(pokemons);
+    } catch (err) {
+      console.error("Erreur fetch pokemons:", err);
+      pokemons = [];
+    }
+  }
+
+  $: if (search !== undefined) {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      loadPokemons();
+    }, 300);
+  }
+
+  onDestroy(() => {
+    clearTimeout(debounceTimeout);
   });
 
   function tryValidate(pokemonToAddId) {
@@ -41,9 +60,9 @@
         class="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
       />
 
-      {#if filtered.length > 0}
+      {#if pokemons.length > 0}
         <ul class="max-h-128 overflow-y-auto border rounded mt-2">
-          {#each filtered as pokemon}
+          {#each pokemons as pokemon}
             <li>
               <button
                 type="button"

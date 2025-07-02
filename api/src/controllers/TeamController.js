@@ -42,6 +42,7 @@ export default class TeamController extends BaseController {
         id: team.id,
         name: team.name,
         description: team.description,
+        profile_id: team.profile_id,
         pokemons,
       };
       res.json(teamWithPokemons);
@@ -55,7 +56,20 @@ export default class TeamController extends BaseController {
     const { pokemonId } = req.body;
 
     try {
-      await PokemonTeam.create({ pokemon_id: pokemonId, team_id: teamId });
+      const team = await Team.findByPk(teamId);
+      if (!team) {
+        return res.status(404).json({ error: "Team not found" });
+      }
+
+      if (team.profile_id !== req.user.id) {
+        return res.status(403).json({ error: "Action Forbidden" });
+      }
+
+      await PokemonTeam.create({
+        pokemon_id: pokemonId,
+        team_id: teamId,
+        profile_id: req.user.id,
+      });
 
       res.json({ message: "Pokemon added to team successfully" });
     } catch (err) {
@@ -77,7 +91,16 @@ export default class TeamController extends BaseController {
       const pokemon = await Pokemon.findByPk(pokemonId);
       if (!pokemon) return res.status(404).json({ error: "Pokemon not found" });
 
-      await team.removePokemon(pokemon);
+      const authorized = await this.verifications(req, res, team);
+      if (!authorized) return;
+
+      await PokemonTeam.destroy({
+        where: {
+          team_id: teamId,
+          pokemon_id: pokemonId,
+        },
+        limit: 1,
+      });
 
       res.json({ message: "Pokemon removed from team successfully" });
     } catch (err) {
@@ -85,8 +108,8 @@ export default class TeamController extends BaseController {
     }
   }
 
-  async verifications(req, res, item) {
-    if (item.profile_id != req.user.id) {
+  async verifications(req, res, team) {
+    if (team.profile_id != req.user.id) {
       res.status(403).json({ error: "Action Forbidden" });
       return false;
     }
