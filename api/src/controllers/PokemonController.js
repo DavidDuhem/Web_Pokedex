@@ -33,70 +33,124 @@ export default class PokemonController extends BaseController {
 
   async getAllPokemonsWithTypes(req, res) {
     try {
-      const limit = 20;
+      const limit = 24;
       const page = parseInt(req.query.page, 10);
       const currentPage = isNaN(page) || page < 1 ? 1 : page;
       const offset = (currentPage - 1) * limit;
 
-      const search = req.query.search;
+      const search = req.query.search ? req.query.search.trim() : "";
 
-      let whereCondition = {};
+      let whereClause = "";
+      const replacements = { limit, offset };
 
-      if (search && search.trim() !== "") {
-        const searchAsNumber = parseInt(search, 10);
-        if (!isNaN(searchAsNumber)) {
-          whereCondition = {
-            [Op.or]: [
-              where(cast(col("Pokemon.id"), "TEXT"), {
-                [Op.iLike]: `%${search}%`,
-              }),
-              { name: { [Op.iLike]: `%${search}%` } },
-              { "$types.name$": { [Op.iLike]: `%${search}%` } },
-            ],
-          };
-        } else {
-          whereCondition = {
-            [Op.or]: [
-              { name: { [Op.iLike]: `%${search}%` } },
-              { "$types.name$": { [Op.iLike]: `%${search}%` } },
-            ],
-          };
-        }
+      if (search !== "") {
+        replacements.searchPattern = `%${search}%`;
+        whereClause = `
+        WHERE p.name ILIKE :searchPattern
+          OR CAST(p.id AS TEXT) ILIKE :searchPattern
+          OR t.name ILIKE :searchPattern
+      `;
       }
 
-      const pokemons = await Pokemon.findAndCountAll({
-        where: whereCondition,
-        include: {
-          model: PokeType,
-          as: "types",
-          attributes: ["id", "name", "color"],
-          through: { attributes: [] },
-          required: false,
-        },
-        limit,
-        offset,
-        order: [["id", "ASC"]],
-        distinct: true,
-        subQuery: false, // <== Ajouté ici pour éviter la sous-requête
-        attributes: [
-          "id",
-          "name",
-          "hp",
-          "atk",
-          "def",
-          "atk_spe",
-          "def_spe",
-          "speed",
-        ],
+      const pokemonsQuery = `
+      SELECT DISTINCT p.id, p.name, p.hp, p.atk, p.def, p.atk_spe, p.def_spe, p.speed
+      FROM pokemon p
+      LEFT JOIN pokemon_type pt ON p.id = pt.pokemon_id
+      LEFT JOIN type t ON pt.type_id = t.id
+      ${whereClause}
+      ORDER BY p.id ASC
+      LIMIT :limit OFFSET :offset
+    `;
+
+      const countQuery = `
+      SELECT COUNT(DISTINCT p.id) AS total
+      FROM pokemon p
+      LEFT JOIN pokemon_type pt ON p.id = pt.pokemon_id
+      LEFT JOIN type t ON pt.type_id = t.id
+      ${whereClause}
+    `;
+
+      const pokemons = await sequelize.query(pokemonsQuery, {
+        replacements,
+        type: sequelize.QueryTypes.SELECT,
       });
 
+      const [countResult] = await sequelize.query(countQuery, {
+        replacements,
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      const total = countResult.total;
+
       res.json({
-        data: pokemons.rows,
-        total: pokemons.count,
+        data: pokemons,
+        total,
         limit,
         offset,
         page: currentPage,
       });
+
+      // const search = req.query.search;
+
+      // let whereCondition = {};
+
+      // if (search && search.trim() !== "") {
+      //   const searchAsNumber = parseInt(search, 10);
+      //   if (!isNaN(searchAsNumber)) {
+      //     whereCondition = {
+      //       [Op.or]: [
+      //         where(cast(col("Pokemon.id"), "TEXT"), {
+      //           [Op.iLike]: `%${search}%`,
+      //         }),
+      //         { name: { [Op.iLike]: `%${search}%` } },
+      //         { "$types.name$": { [Op.iLike]: `%${search}%` } },
+      //       ],
+      //     };
+      //   } else {
+      //     whereCondition = {
+      //       [Op.or]: [
+      //         { name: { [Op.iLike]: `%${search}%` } },
+      //         { "$types.name$": { [Op.iLike]: `%${search}%` } },
+      //       ],
+      //     };
+      //   }
+      // }
+
+      // const pokemons = await Pokemon.findAndCountAll({
+      //   where: whereCondition,
+
+      // Sequelize was limiting search before trying to search through type, causing the l
+
+      //   include: {
+      //     model: PokeType,
+      //     as: "types",
+      //     attributes: ["id", "name", "color"],
+      //     through: { attributes: [] },
+      //     required: false,
+      //   },
+      //   limit,
+      //   offset,
+      //   order: [["id", "ASC"]],
+      //   distinct: true,
+      //   attributes: [
+      //     "id",
+      //     "name",
+      //     "hp",
+      //     "atk",
+      //     "def",
+      //     "atk_spe",
+      //     "def_spe",
+      //     "speed",
+      //   ],
+      // });
+
+      // res.json({
+      //   data: pokemons.rows,
+      //   total: pokemons.count,
+      //   limit,
+      //   offset,
+      //   page: currentPage,
+      // });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
