@@ -6,10 +6,13 @@ const pokemonService = new PokemonService();
 
 /** @type {import('./$types').PageLoad} */
 
-export async function load({ params, fetch }) {
+export async function load({ params, fetch, url }) {
   try {
+    const search = url.searchParams.get("search") || "";
+
     const team = await teamService.getTeamAndPokemons(params.id, fetch);
-    const allPokemons = await pokemonService.getAll(fetch);
+    const allPokemons = await pokemonService.getAll(search);
+
     return { team, allPokemons };
   } catch (err) {
     return { team: null, error: err.message || "Erreur inconnue" };

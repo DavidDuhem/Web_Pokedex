@@ -12,11 +12,15 @@ export default class BaseService {
 
   // fetchFn is from sveltekit, it makes it work server AND client side
 
-  async getAll(page = "", fetchFn = fetch) {
+  async getAll(page = "", search = "", fetchFn = fetch) {
     const url = new URL(`${this.baseUrl}/${this.endpoint}`);
 
-    if (page != "") {
+    if (page !== "") {
       url.searchParams.append("page", page);
+    }
+
+    if (search) {
+      url.searchParams.append("search", search);
     }
 
     const updatedUrl = url.toString();

@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import {
   Pokemon,
   PokeType,
@@ -33,9 +34,27 @@ export default class PokemonController extends BaseController {
   async getAllPokemonsWithTypes(req, res) {
     try {
       const limit = 20;
-      const offset = (parseInt(req.query.page) - 1) * limit;
+      const page = parseInt(req.query.page, 10);
+      const currentPage = isNaN(page) || page < 1 ? 1 : page;
+      const offset = (currentPage - 1) * limit;
+
+      const search = req.query.search;
+
+      let whereCondition = {};
+
+      if (search && search.trim() !== "") {
+        const searchAsNumber = parseInt(search, 10);
+        if (!isNaN(searchAsNumber)) {
+          whereCondition.id = searchAsNumber;
+        } else {
+          whereCondition.name = {
+            [Op.iLike]: `%${search}%`,
+          };
+        }
+      }
 
       const pokemons = await Pokemon.findAndCountAll({
+        where: whereCondition,
         include: {
           model: PokeType,
           as: "types",
@@ -63,6 +82,7 @@ export default class PokemonController extends BaseController {
         total: pokemons.count,
         limit,
         offset,
+        page: currentPage,
       });
     } catch (err) {
       res.status(500).json({ error: err.message });

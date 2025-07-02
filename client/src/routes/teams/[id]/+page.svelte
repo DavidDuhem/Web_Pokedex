@@ -16,7 +16,7 @@
   const team = data.team;
   const pokemons = data.team.pokemons;
 
-  const allPokemons = data.allPokemons;
+  const allPokemons = data.allPokemons.data;
 
   let showPopup = false;
 
