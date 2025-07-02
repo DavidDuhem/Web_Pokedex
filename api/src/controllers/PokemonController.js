@@ -53,11 +53,23 @@ export default class PokemonController extends BaseController {
       }
 
       const pokemonsQuery = `
-      SELECT DISTINCT p.id, p.name, p.hp, p.atk, p.def, p.atk_spe, p.def_spe, p.speed
+      SELECT
+      p.id, p.name, p.hp, p.atk, p.def, p.atk_spe, p.def_spe, p.speed,
+      COALESCE(
+        json_agg(
+          json_build_object(
+            'id', t.id,
+            'name', t.name,
+            'color', t.color
+          )
+        ) FILTER (WHERE t.id IS NOT NULL),
+        '[]'
+        ) AS types
       FROM pokemon p
       LEFT JOIN pokemon_type pt ON p.id = pt.pokemon_id
       LEFT JOIN type t ON pt.type_id = t.id
       ${whereClause}
+      GROUP BY p.id
       ORDER BY p.id ASC
       LIMIT :limit OFFSET :offset
     `;
