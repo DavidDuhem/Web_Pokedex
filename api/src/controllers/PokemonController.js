@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, where, cast, col } from "sequelize";
 import {
   Pokemon,
   PokeType,
@@ -45,10 +45,21 @@ export default class PokemonController extends BaseController {
       if (search && search.trim() !== "") {
         const searchAsNumber = parseInt(search, 10);
         if (!isNaN(searchAsNumber)) {
-          whereCondition.id = searchAsNumber;
+          whereCondition = {
+            [Op.or]: [
+              where(cast(col("Pokemon.id"), "TEXT"), {
+                [Op.iLike]: `%${search}%`,
+              }),
+              { name: { [Op.iLike]: `%${search}%` } },
+              { "$types.name$": { [Op.iLike]: `%${search}%` } },
+            ],
+          };
         } else {
-          whereCondition.name = {
-            [Op.iLike]: `%${search}%`,
+          whereCondition = {
+            [Op.or]: [
+              { name: { [Op.iLike]: `%${search}%` } },
+              { "$types.name$": { [Op.iLike]: `%${search}%` } },
+            ],
           };
         }
       }
@@ -60,11 +71,13 @@ export default class PokemonController extends BaseController {
           as: "types",
           attributes: ["id", "name", "color"],
           through: { attributes: [] },
+          required: false,
         },
         limit,
         offset,
         order: [["id", "ASC"]],
         distinct: true,
+        subQuery: false, // <== Ajouté ici pour éviter la sous-requête
         attributes: [
           "id",
           "name",
