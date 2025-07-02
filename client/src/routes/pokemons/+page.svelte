@@ -3,8 +3,9 @@
   import PokemonCardTable from "$lib/components/pokemons/PokemonCardTable.svelte";
 
   export let data;
-
-  const pokemons = data.pokemons;
+  const pokemons = data.pokemons.data;
+  const totalPokemon = data.pokemons.total;
+  const limit = data.pokemons.limit;
 </script>
 
 <div class="max-w-4xl mx-auto mt-8 px-4">
@@ -14,6 +15,6 @@
   {:else if !pokemons || pokemons.length === 0}
     <p>Aucun pokémon trouvé.</p>
   {:else}
-    <PokemonCardTable {pokemons} />
+    <PokemonCardTable {pokemons} {totalPokemon} {limit} />
   {/if}
 </div>
