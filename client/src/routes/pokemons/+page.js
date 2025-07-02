@@ -10,7 +10,7 @@ export async function load({ url, fetch }) {
 
     const pokemons = await service.getAll(page, fetch);
 
-    return { pokemons };
+    return { pokemons, page };
   } catch (err) {
     return { pokemons: [], error: err.message || "Erreur inconnue" };
   }

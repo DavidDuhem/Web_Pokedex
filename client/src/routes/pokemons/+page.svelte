@@ -6,6 +6,7 @@
   const pokemons = data.pokemons.data;
   const totalPokemon = data.pokemons.total;
   const limit = data.pokemons.limit;
+  const currentPage = data.page;
 </script>
 
 <div class="max-w-4xl mx-auto mt-8 px-4">
@@ -15,6 +16,6 @@
   {:else if !pokemons || pokemons.length === 0}
     <p>Aucun pokémon trouvé.</p>
   {:else}
-    <PokemonCardTable {pokemons} {totalPokemon} {limit} />
+    <PokemonCardTable {pokemons} {totalPokemon} {limit} {currentPage} />
   {/if}
 </div>
