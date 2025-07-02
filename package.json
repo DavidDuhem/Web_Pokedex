@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "prettier-plugin-svelte": "^3.4.0"
+  },
+  "dependencies": {
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }
