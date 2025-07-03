@@ -19,7 +19,6 @@ export default class PokemonService extends BaseService {
           Authorization: `Bearer ${userToken}`,
         },
       });
-      console.log("Vote added");
     } else {
       res = await fetchFn(`${this.baseUrl}/${this.endpoint}/${id}/votes`, {
         method: "DELETE",
@@ -27,7 +26,6 @@ export default class PokemonService extends BaseService {
           Authorization: `Bearer ${userToken}`,
         },
       });
-      console.log("Vote removed");
     }
 
     return res.json();

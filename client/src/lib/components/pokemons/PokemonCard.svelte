@@ -26,8 +26,7 @@
       type="button"
       class="absolute top-0 right-0 p-1 transition"
       aria-label="Like this Pokémon"
-      on:click|stopPropagation={() =>
-        onLikeClicked(pokemon.id, pokemon.hasVoted)}
+      on:click|stopPropagation={() => onLikeClicked(pokemon, pokemon.hasVoted)}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

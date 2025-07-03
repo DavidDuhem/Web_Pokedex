@@ -6,14 +6,27 @@
   export let data;
   const service = new PokemonService();
 
-  const pokemons = data.pokemons.data;
+  let pokemons = data.pokemons.data;
   const totalPokemon = data.pokemons.total;
   const limit = data.pokemons.limit;
   const currentPage = data.page;
 
-  async function onLikeClicked(pokemonId, alreadyVoted) {
+  async function onLikeClicked(pokemon, alreadyVoted) {
     try {
-      await service.manageVotes(pokemonId, alreadyVoted, fetch);
+      const res = await service.manageVotes(pokemon.id, alreadyVoted, fetch);
+
+      if (res) {
+        const index = pokemons.findIndex((p) => p.id === pokemon.id);
+        if (index !== -1) {
+          const pokemon = { ...pokemons[index] };
+          pokemon.hasVoted = !alreadyVoted;
+          const newVotesCount =
+            parseInt(pokemon.votesCount) + (alreadyVoted ? -1 : 1);
+          pokemon.votesCount = newVotesCount;
+          pokemons[index] = pokemon;
+          pokemons = [...pokemons];
+        }
+      }
     } catch (err) {
       return { pokemons: [], error: err.message || "Unknown Error" };
     }

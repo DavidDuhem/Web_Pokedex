@@ -40,8 +40,6 @@ export default class PokemonController extends BaseController {
 
       const profileId = req.user ? req.user.id : null;
 
-      console.log("PROFILE ID ; " + profileId);
-
       const search = req.query.search ? req.query.search.trim() : "";
 
       let whereClause = "";
@@ -69,7 +67,7 @@ export default class PokemonController extends BaseController {
           ) FILTER (WHERE t.id IS NOT NULL),
           '[]'
         ) AS types,
-        COUNT(DISTINCT CONCAT(v.profile_id, '-', v.pokemon_id)) AS "votesCount",
+        COUNT(DISTINCT CASE WHEN v.profile_id IS NOT NULL THEN CONCAT(v.profile_id, '-', v.pokemon_id) ELSE NULL END) AS "votesCount",
         CASE WHEN v_profile.profile_id IS NULL THEN false ELSE true END AS "hasVoted"
       FROM pokemon p
       LEFT JOIN pokemon_type pt ON p.id = pt.pokemon_id
