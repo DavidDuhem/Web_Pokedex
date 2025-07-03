@@ -19,6 +19,11 @@ router.get(
 
 // Votes management
 
+router.get(
+  "/:id/votes",
+  cw((req, res, next) => pokemonController.getVotes(req, res, next))
+);
+
 router.post(
   "/:id/votes",
   verifyToken,
