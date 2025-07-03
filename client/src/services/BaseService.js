@@ -23,12 +23,20 @@ export default class BaseService {
       url.searchParams.append("search", search);
     }
 
-    const updatedUrl = url.toString();
+    // If user connected, we want to append token to know is has voted
 
-    console.log(updatedUrl);
+    const currentToken = get(token);
 
-    const res = await fetchFn(updatedUrl);
-    if (!res.ok) throw new Error(`Error fetching ${updatedUrl}`);
+    const headers = new Headers();
+
+    if (currentToken) {
+      headers.append("Authorization", `Bearer ${currentToken}`);
+    }
+
+    const res = await fetchFn(url.toString(), {
+      headers: headers,
+    });
+    if (!res.ok) throw new Error(`Error fetching ${url}`);
     return res.json();
   }
 

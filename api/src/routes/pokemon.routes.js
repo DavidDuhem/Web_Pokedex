@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { controllerWrapper as cw } from "../utils/controllerWrapper.js";
-import { verifyToken } from "../middlewares/authMiddleware.js";
+import { verifyToken, optionalAuth } from "../middlewares/authMiddleware.js";
 import PokemonController from "../controllers/PokemonController.js";
 
 const router = Router();
@@ -10,10 +10,12 @@ const pokemonController = new PokemonController();
 
 router.get(
   "/",
+  optionalAuth,
   cw((req, res) => pokemonController.getAllPokemonsWithTypes(req, res))
 );
 router.get(
   "/:id",
+  optionalAuth,
   cw((req, res, next) => pokemonController.getPokemonWithTypes(req, res, next))
 );
 

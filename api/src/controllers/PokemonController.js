@@ -38,10 +38,12 @@ export default class PokemonController extends BaseController {
       const currentPage = isNaN(page) || page < 1 ? 1 : page;
       const offset = (currentPage - 1) * limit;
 
+      const profileId = req.user ? req.user.id : null;
+
       const search = req.query.search ? req.query.search.trim() : "";
 
       let whereClause = "";
-      const replacements = { limit, offset };
+      const replacements = { limit, offset, profileId };
 
       if (search !== "") {
         replacements.searchPattern = `%${search}%`;
@@ -53,34 +55,39 @@ export default class PokemonController extends BaseController {
       }
 
       const pokemonsQuery = `
-      SELECT
-      p.id, p.name, p.hp, p.atk, p.def, p.atk_spe, p.def_spe, p.speed,
-      COALESCE(
-        json_agg(
-          json_build_object(
-            'id', t.id,
-            'name', t.name,
-            'color', t.color
-          )
-        ) FILTER (WHERE t.id IS NOT NULL),
-        '[]'
-        ) AS types
+        SELECT
+        p.id, p.name, p.hp, p.atk, p.def, p.atk_spe, p.def_spe, p.speed,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', t.id,
+              'name', t.name,
+              'color', t.color
+            )
+          ) FILTER (WHERE t.id IS NOT NULL),
+          '[]'
+        ) AS types,
+        COUNT(DISTINCT CASE WHEN v.profile_id IS NOT NULL THEN CONCAT(v.profile_id, '-', v.pokemon_id) ELSE NULL END) AS "votesCount",
+        CASE WHEN v_profile.profile_id IS NULL THEN false ELSE true END AS "hasVoted"
       FROM pokemon p
       LEFT JOIN pokemon_type pt ON p.id = pt.pokemon_id
       LEFT JOIN type t ON pt.type_id = t.id
+      LEFT JOIN vote v ON v.pokemon_id = p.id
+      LEFT JOIN vote v_profile 
+        ON v_profile.pokemon_id = p.id 
+        AND v_profile.profile_id = :profileId
       ${whereClause}
-      GROUP BY p.id
+      GROUP BY p.id, v_profile.profile_id
       ORDER BY p.id ASC
-      LIMIT :limit OFFSET :offset
-    `;
+      LIMIT :limit OFFSET :offset`;
 
       const countQuery = `
-      SELECT COUNT(DISTINCT p.id) AS total
-      FROM pokemon p
-      LEFT JOIN pokemon_type pt ON p.id = pt.pokemon_id
-      LEFT JOIN type t ON pt.type_id = t.id
-      ${whereClause}
-    `;
+        SELECT COUNT(DISTINCT p.id) AS total
+        FROM pokemon p
+        LEFT JOIN pokemon_type pt ON p.id = pt.pokemon_id
+        LEFT JOIN type t ON pt.type_id = t.id
+        ${whereClause}
+      `;
 
       const pokemons = await sequelize.query(pokemonsQuery, {
         replacements,

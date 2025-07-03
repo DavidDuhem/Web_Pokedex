@@ -6,6 +6,7 @@
   export let limit;
   export let currentPage = 1;
   export let fromUrl = "";
+  export let onLikeClicked;
 
   const nbPages = Array.from(
     { length: Math.ceil(totalPokemon / limit) },
@@ -20,7 +21,7 @@
   class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-10 mb-10"
 >
   {#each pokemons as pokemon}
-    <PokemonCard {pokemon} {fromUrl} />
+    <PokemonCard {pokemon} {fromUrl} {onLikeClicked} />
   {/each}
 </div>
 
