@@ -12,6 +12,6 @@ export async function load({ url, fetch }) {
 
     return { pokemons, page };
   } catch (err) {
-    return { pokemons: [], error: err.message || "Erreur inconnue" };
+    return { pokemons: [], error: err.message || "Unknown Error" };
   }
 }
