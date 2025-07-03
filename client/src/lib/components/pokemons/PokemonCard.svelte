@@ -19,7 +19,6 @@
     />
     <span class="text-red-600 font-semibold">{pokemon.name}</span>
     <span>{pokemon.votesCount} likes</span>
-    {pokemon.hasVoted}
   </a>
 
   {#if $isLoggedIn}
@@ -32,7 +31,10 @@
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 transition-colors duration-200 text-gray-400 hover:text-red-500"
+        class="h-6 w-6 transition-colors duration-200
+    {pokemon.hasVoted
+          ? 'text-red-500 hover:text-gray-400'
+          : 'text-gray-400 hover:text-red-500'}"
         fill="currentColor"
         viewBox="0 0 24 24"
       >
