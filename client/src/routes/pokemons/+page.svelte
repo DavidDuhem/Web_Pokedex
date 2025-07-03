@@ -1,5 +1,6 @@
 <script>
   /** @type {{ data: import('./$types').PageData }} */
+  import { token } from "$lib/../stores/auth";
   import PokemonCardTable from "$lib/components/pokemons/PokemonCardTable.svelte";
   import PokemonService from "$lib/../services/PokemonService.js";
 
@@ -7,9 +8,16 @@
   const service = new PokemonService();
 
   let pokemons = data.pokemons.data;
-  const totalPokemon = data.pokemons.total;
-  const limit = data.pokemons.limit;
-  const currentPage = data.page;
+  let totalPokemon = data.pokemons.total;
+  let limit = data.pokemons.limit;
+  let currentPage = data.page;
+
+  let currentToken = $token;
+
+  $: if ($token !== currentToken) {
+    currentToken = $token;
+    fetchAllPokemons();
+  }
 
   async function onLikeClicked(pokemon, alreadyVoted) {
     try {
@@ -30,6 +38,12 @@
     } catch (err) {
       return { pokemons: [], error: err.message || "Unknown Error" };
     }
+  }
+
+  async function fetchAllPokemons() {
+    console.log("FETCHING");
+    const res = await service.getAll(currentPage?.toString(), "", fetch);
+    pokemons = res.data;
   }
 </script>
 
