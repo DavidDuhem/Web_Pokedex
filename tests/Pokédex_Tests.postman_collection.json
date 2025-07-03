@@ -12,7 +12,7 @@
 			"name": "Pokémons",
 			"item": [
 				{
-					"name": "Get All Pokémons",
+					"name": "Get All Pokémons (Limit 20)",
 					"event": [
 						{
 							"listen": "test",
@@ -62,6 +62,58 @@
 								"api",
 								"pokemons",
 								"151"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Pokémons (Page 4)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/pokemons?page=4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"pokemons"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Pokémons by name, id or type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/pokemons?search=feu",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"pokemons"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "feu"
+								}
 							]
 						}
 					},
@@ -368,6 +420,131 @@
 								"api",
 								"types",
 								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Votes",
+			"item": [
+				{
+					"name": "Add Pokemon Vote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicHJvZmlsZV9pZCI6MSwiaWF0IjoxNzUxNDAwMDM0LCJleHAiOjE3NTE0MDM2MzR9.4GX7BXVgwn-SL5JDI9pHW0YZWaNlxhN_faOiP6FW8ZA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/pokemons/151/votes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"pokemons",
+								"151",
+								"votes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Pokemon Vote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicHJvZmlsZV9pZCI6MSwiaWF0IjoxNzUxNDAwMDM0LCJleHAiOjE3NTE0MDM2MzR9.4GX7BXVgwn-SL5JDI9pHW0YZWaNlxhN_faOiP6FW8ZA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/pokemons/151/votes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"pokemons",
+								"151",
+								"votes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"david@test.com\",\n    \"password\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
 							]
 						}
 					},
