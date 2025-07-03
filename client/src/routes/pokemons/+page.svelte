@@ -41,7 +41,6 @@
   }
 
   async function fetchAllPokemons() {
-    console.log("FETCHING");
     const res = await service.getAll(currentPage?.toString(), "", fetch);
     pokemons = res.data;
   }

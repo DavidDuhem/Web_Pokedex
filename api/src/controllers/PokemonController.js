@@ -43,7 +43,7 @@ export default class PokemonController extends BaseController {
       const search = req.query.search ? req.query.search.trim() : "";
 
       let whereClause = "";
-      const replacements = { limit, offset };
+      const replacements = { limit, offset, profileId };
 
       if (search !== "") {
         replacements.searchPattern = `%${search}%`;
@@ -90,11 +90,7 @@ export default class PokemonController extends BaseController {
       `;
 
       const pokemons = await sequelize.query(pokemonsQuery, {
-        replacements: {
-          limit: 20,
-          offset: 0,
-          profileId: profileId,
-        },
+        replacements,
         type: sequelize.QueryTypes.SELECT,
       });
 
