@@ -4,7 +4,7 @@
   const pokemon = data.pokemon;
 </script>
 
-<div class="max-w-4xl mx-auto mt-25 px-4">
+<div class="max-w-4xl mx-auto px-4">
   <h1 class="text-3xl font-bold text-red-600 mb-4">Détails du Pokémon</h1>
 
   {#if !pokemon}

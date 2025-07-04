@@ -11,7 +11,7 @@
     href={`/pokemons/${pokemon.id}${fromUrl !== "" ? "?from=" + fromUrl : ""}`}
     class="border rounded p-2 flex flex-col items-center hover:shadow-lg transition cursor-pointer hover:bg-gray-200"
   >
-    <span class="text-sm text-gray-500">ID: {pokemon.id}</span>
+    <span class="text-sm text-gray-500">#{pokemon.id}</span>
     <img
       src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
       alt={pokemon.name}

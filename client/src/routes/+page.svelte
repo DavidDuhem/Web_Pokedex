@@ -1,9 +1,8 @@
 <script>
-  import { onMount } from "svelte";
 </script>
 
 <div
-  class="flex flex-col items-center justify-center h-screen text-center px-4"
+  class="flex flex-col items-center justify-center text-center px-4 mt-32 sm:mt-64 lg:mt-100"
 >
   <h1 class="text-4xl font-extrabold text-red-600 drop-shadow-sm mb-6">
     Bienvenue sur le Pokédex !

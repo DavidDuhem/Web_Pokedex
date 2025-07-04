@@ -75,7 +75,7 @@
   <p>Équipe non trouvée.</p>
 {:else}
   <div
-    class="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-xl shadow-md border border-red-200"
+    class="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-md border border-red-200"
   >
     <div class="flex flex-col sm:flex-row items-start gap-6">
       <img
