@@ -9,7 +9,7 @@
 <div class="min-h-screen flex flex-col">
   <Header {data} />
 
-  <main class="flex-grow mt-10">
+  <main class="flex-grow mt-20">
     <slot />
   </main>
 
