@@ -3,6 +3,7 @@
   import { token } from "$lib/../stores/auth";
   import PokemonCardTable from "$lib/components/pokemons/PokemonCardTable.svelte";
   import PokemonService from "$lib/../services/PokemonService.js";
+  import { errorHandler } from "$lib/../utils/errorHandler";
 
   export let data;
   const service = new PokemonService();
@@ -20,7 +21,7 @@
   }
 
   async function onLikeClicked(pokemon, alreadyVoted) {
-    try {
+    await errorHandler(async () => {
       const res = await service.manageVotes(pokemon.id, alreadyVoted, fetch);
 
       if (res) {
@@ -35,14 +36,14 @@
           pokemons = [...pokemons];
         }
       }
-    } catch (err) {
-      return { pokemons: [], error: err.message || "Unknown Error" };
-    }
+    }, "Error while adding/removing vote");
   }
 
   async function fetchAllPokemons() {
-    const res = await service.getAll(currentPage?.toString(), "", fetch);
-    pokemons = res.data;
+    await errorHandler(async () => {
+      const res = await service.getAll(currentPage?.toString(), "", fetch);
+      pokemons = res.data;
+    }, "Error while adding/removing vote");
   }
 </script>
 

@@ -1,7 +1,7 @@
 <script>
   import Popup from "./Popup.svelte";
   import AuthService from "$lib/../services/AuthService.js";
-  import { preventDefault } from "svelte/legacy";
+  import { errorHandler } from "$lib/../utils/errorHandler";
 
   const authService = new AuthService();
 
@@ -24,13 +24,17 @@
   async function trylogin() {
     resetMessages();
 
-    try {
-      await authService.login({ email, password }, fetch);
-      onLoginValidate();
-    } catch (err) {
-      errorLoging = true;
-      console.log("Error : " + err);
-    }
+    return await errorHandler(
+      async () => {
+        await authService.login({ email, password }, fetch);
+        onLoginValidate();
+      },
+      "Login failed",
+      () => {
+        errorLoging = true;
+        return null;
+      }
+    );
   }
 
   async function tryRegister() {
@@ -41,14 +45,19 @@
       return;
     }
 
-    try {
-      await authService.register({ email, username, password }, fetch);
-      onRegisterValidate();
-      confirmationRegister = true;
-      isRegistering = false;
-    } catch (err) {
-      alert("Error while registering : " + err.message);
-    }
+    return await errorHandler(
+      async () => {
+        await authService.register({ email, username, password }, fetch);
+        onRegisterValidate();
+        confirmationRegister = true;
+        isRegistering = false;
+      },
+      "Login failed",
+      () => {
+        errorLoging = true;
+        return null;
+      }
+    );
   }
 
   function handleClose() {

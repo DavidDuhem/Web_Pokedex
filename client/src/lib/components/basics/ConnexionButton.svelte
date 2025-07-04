@@ -1,19 +1,19 @@
 <script>
   import ConnexionPopup from "../popups/ConnexionPopup.svelte";
 
-  import { isLoggedIn, token } from "../../../stores/auth.js";
+  import { isLoggedIn, profileId, token } from "../../../stores/auth.js";
 
   let showPopup = false;
 
   async function confirmConnexion() {
     showPopup = false;
-    isLoggedIn.set(true);
   }
   async function confirmRegister() {}
 
   async function disconnect() {
     token.set(null);
     isLoggedIn.set(false);
+    profileId.set(null);
     if (typeof document !== "undefined") {
       document.cookie = "token=; path=/; max-age=0";
     }

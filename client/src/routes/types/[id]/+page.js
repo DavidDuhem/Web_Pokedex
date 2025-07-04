@@ -1,12 +1,13 @@
 /** @type {import('./$types').PageLoad} */
 
 import TypeService from "$lib/../services/TypeService.js";
+import { errorHandler } from "$lib/../utils/errorHandler";
 
 const service = new TypeService();
 
 export async function load({ params, fetch }) {
-  const id = params.id;
-  try {
+  return await errorHandler(async () => {
+    const id = params.id;
     const type = await service.getOne(id, fetch);
 
     if (!type) {
@@ -14,7 +15,5 @@ export async function load({ params, fetch }) {
     }
 
     return { type };
-  } catch (err) {
-    return { type: null, error: err.message || "Erreur inconnue" };
-  }
+  });
 }

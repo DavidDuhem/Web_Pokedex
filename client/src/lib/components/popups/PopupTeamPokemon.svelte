@@ -2,6 +2,7 @@
   import { onDestroy } from "svelte";
   import Popup from "./Popup.svelte";
   import PokemonService from "$lib/../services/PokemonService.js";
+  import { errorHandler } from "$lib/../utils/errorHandler";
 
   const service = new PokemonService();
 
@@ -17,15 +18,12 @@
   let debounceTimeout;
 
   async function loadPokemons() {
-    try {
+    return await errorHandler(async () => {
       const data = await service.getAll("", search);
       pokemons = data.data;
       onPokemonListUpdated(pokemons);
       console.log(pokemons);
-    } catch (err) {
-      console.error("Erreur fetch pokemons:", err);
-      pokemons = [];
-    }
+    });
   }
 
   $: if (search !== undefined) {

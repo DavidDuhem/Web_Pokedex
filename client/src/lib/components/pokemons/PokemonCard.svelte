@@ -18,10 +18,12 @@
       class="w-20 h-20 object-contain mb-2"
     />
     <span class="text-red-600 font-semibold">{pokemon.name}</span>
-    <span>{pokemon.votesCount} likes</span>
+    {#if pokemon.votesCount != null}
+      <span>{pokemon.votesCount} likes</span>
+    {/if}
   </a>
 
-  {#if $isLoggedIn}
+  {#if $isLoggedIn && pokemon.votesCount != null}
     <button
       type="button"
       class="absolute top-0 right-0 p-1 transition"

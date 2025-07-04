@@ -8,15 +8,14 @@
   import TypeTag from "$lib/components/types/TypeTag.svelte";
   import TeamService from "$lib/../services/TeamService.js";
   import { getCookie } from "$lib/../utils/tokenValidation.js";
+  import { errorHandler } from "$lib/../utils/errorHandler";
 
   /** @type {{ data: import('./$types').PageData }} */
 
   export let data;
 
-  const team = data.team;
-  const pokemons = data.team.pokemons;
-
-  let allPokemons = data.allPokemons.data;
+  let team = data?.team;
+  let allPokemons = data.allPokemons?.data;
 
   let showPopup = false;
 
@@ -26,8 +25,8 @@
   const teamService = new TeamService();
 
   async function confirmDelete(pokemonId) {
-    const id = team.id;
-    try {
+    await errorHandler(async () => {
+      const id = team.id;
       await teamService.deleteTeamPokemon(id, pokemonId, fetch);
 
       const index = team.pokemons.findIndex(
@@ -39,14 +38,12 @@
           ...team.pokemons.slice(index + 1),
         ];
       }
-    } catch (err) {
-      alert("Error while deleting : " + err.message);
-    }
+    }, "Error while deleting team");
   }
 
   async function confirmAddPokemon(pokemonId) {
-    const id = team.id;
-    try {
+    await errorHandler(async () => {
+      const id = team.id;
       await teamService.addTeamPokemon(id, { pokemonId }, fetch);
       const newPokemon = allPokemons.find(
         (pokemon) => pokemon.id === pokemonId
@@ -54,9 +51,7 @@
       if (newPokemon) {
         team.pokemons = [...team.pokemons, newPokemon];
       }
-    } catch (err) {
-      alert("Error while adding : " + err.message);
-    }
+    }, "Error while adding pokemon");
     showPopup = false;
   }
 
@@ -140,7 +135,7 @@
               <DeleteButton
                 id={pokemon.id}
                 onConfirm={confirmDelete}
-                startText="x"
+                startText="Retirer"
                 withConfirmation={false}
               />
             {/if}

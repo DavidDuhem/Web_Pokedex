@@ -1,6 +1,7 @@
 import BaseService from "./BaseService";
 import { token } from "../stores/auth.js";
 import { get } from "svelte/store";
+import { errorHandler } from "$lib/../utils/errorHandler";
 
 export default class TeamService extends BaseService {
   constructor(baseUrl) {
@@ -8,47 +9,60 @@ export default class TeamService extends BaseService {
   }
 
   async getTeamAndPokemons(id, fetchFn = fetch) {
-    const res = await fetchFn(
-      `${this.baseUrl}/${this.endpoint}/${id}/pokemons`
-    );
-    if (!res.ok)
-      throw new Error(`Error fetching ${this.endpoint}/${id}/pokemons`);
-    return res.json();
+    return await errorHandler(async () => {
+      const res = await fetchFn(
+        `${this.baseUrl}/${this.endpoint}/${id}/pokemons`
+      );
+
+      if (!res.ok) {
+        throw new Error(`Error fetching ${this.endpoint}/${id}/pokemons`);
+      }
+
+      return res.json();
+    }, "Fetch failed");
   }
 
   async addTeamPokemon(teamId, data, fetchFn = fetch) {
-    const res = await fetchFn(
-      `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${get(token)}`,
-        },
-        body: JSON.stringify(data),
+    return await errorHandler(async () => {
+      const res = await fetchFn(
+        `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${get(token)}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(
+          err.error ||
+            `Error while fetching ${this.baseUrl}/${this.endpoint}/${teamId}/pokemons`
+        );
       }
-    );
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || "Error while creating");
-    }
-    return res.json();
+      return res.json();
+    }, "Post failed");
   }
 
   async deleteTeamPokemon(teamId, pokemonId, fetchFn = fetch) {
-    const res = await fetchFn(
-      `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons/${pokemonId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${get(token)}`,
-        },
-      }
-    );
-    if (!res.ok)
-      throw new Error(
-        `Error fetching ${this.endpoint}/${teamId}/pokemons/${pokemonId}`
+    return await errorHandler(async () => {
+      const res = await fetchFn(
+        `${this.baseUrl}/${this.endpoint}/${teamId}/pokemons/${pokemonId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${get(token)}`,
+          },
+        }
       );
-    return res.json();
+      if (!res.ok)
+        throw new Error(
+          `Error fetching ${this.endpoint}/${teamId}/pokemons/${pokemonId}`
+        );
+      return res.json();
+    }, "Delete failed");
   }
 }
