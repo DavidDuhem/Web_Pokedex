@@ -1,9 +1,8 @@
 <script>
   import TeamService from "$lib/../services/TeamService.js";
-  import BackButton from "$lib/components/basics/BackButton.svelte";
   import TeamTable from "$lib/components/teams/TeamTable.svelte";
   import TeamForm from "$lib/components/teams/TeamForm.svelte";
-  import { getCookie } from "$lib/../utils/tokenValidation.js";
+  import { errorHandler } from "$lib/../utils/errorHandler";
 
   /** @type {{ data: import('./$types').PageData }} */
   export let data;
@@ -42,15 +41,13 @@
 
   async function handleSubmit(event) {
     event.preventDefault();
-    try {
+    await errorHandler(async () => {
       const newTeam = await service.create({ name, description }, fetch);
 
       teams = [...teams, newTeam];
       name = "";
       description = "";
-    } catch (err) {
-      alert("Error while creating : " + err.message);
-    }
+    }, "Error while creating team");
   }
 
   /*************************
@@ -58,14 +55,13 @@
    *************************/
 
   function startEdit(team) {
-    console.log("STARTING EDIT");
     editingId = team.id;
     editName = team.name;
     editDescription = team.description;
   }
 
   async function confirmEdit(id) {
-    try {
+    await errorHandler(async () => {
       const updatedTeam = await service.update(
         id,
         { name: editName, description: editDescription },
@@ -73,13 +69,10 @@
       );
       teams = teams.map((t) => (t.id === id ? updatedTeam : t));
       editingId = null;
-    } catch (err) {
-      alert("Error while updating: " + err.message);
-    }
+    }, "Error while updating team");
   }
 
   function cancelEdit() {
-    console.log("CANCELING EDIT");
     editingId = null;
   }
 
@@ -95,13 +88,11 @@
   }
 
   async function confirmDelete(id) {
-    try {
+    await errorHandler(async () => {
       await service.delete(id, fetch);
       teams = teams.filter((team) => team.id !== id);
       deletingId = null;
-    } catch (err) {
-      alert("Error while deleting : " + err.message);
-    }
+    }, "Error while deleting team");
   }
 </script>
 
