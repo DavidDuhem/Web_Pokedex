@@ -135,7 +135,7 @@
               <DeleteButton
                 id={pokemon.id}
                 onConfirm={confirmDelete}
-                startText="x"
+                startText="Retirer"
                 withConfirmation={false}
               />
             {/if}

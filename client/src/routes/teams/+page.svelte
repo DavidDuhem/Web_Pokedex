@@ -3,9 +3,20 @@
   import TeamTable from "$lib/components/teams/TeamTable.svelte";
   import TeamForm from "$lib/components/teams/TeamForm.svelte";
   import { errorHandler } from "$lib/../utils/errorHandler";
+  import { isLoggedIn } from "$lib/../stores/auth";
 
   /** @type {{ data: import('./$types').PageData }} */
   export let data;
+
+  /*************************
+   * Reset modifiers variables when the user disconnects
+   *************************/
+
+  $: if (!$isLoggedIn) {
+    editingId = null;
+    editName = "";
+    editDescription = "";
+  }
 
   /*************************
    * 📄 Default State

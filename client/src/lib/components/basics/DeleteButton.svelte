@@ -37,7 +37,7 @@
   </button>
 {:else}
   <button
-    class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
+    class="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 transition"
     on:click={withConfirmation ? start : confirm}
   >
     {startText}

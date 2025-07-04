@@ -1,5 +1,6 @@
 import BaseService from "./BaseService";
 import { token } from "../stores/auth.js";
+import { profileId, isLoggedIn } from "$lib/../stores/auth.js";
 
 export default class AuthService extends BaseService {
   constructor(baseUrl) {
@@ -29,6 +30,9 @@ export default class AuthService extends BaseService {
     token.set(newToken);
     document.cookie = `profileId=${dataRes.profile.id}; path=/; max-age=3600; secure; samesite=lax`;
     document.cookie = `token=${newToken}; path=/; max-age=3600; secure; samesite=lax`;
+    profileId.set(dataRes.profile.id);
+    isLoggedIn.set(true);
+
     return dataRes;
   }
 

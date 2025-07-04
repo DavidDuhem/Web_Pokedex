@@ -6,3 +6,5 @@ export const token = writable(currentToken);
 
 const initial = isTokenValid(currentToken);
 export const isLoggedIn = writable(initial);
+
+export const profileId = writable(null);
