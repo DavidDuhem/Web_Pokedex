@@ -1605,8 +1605,9 @@ const vol = await PokeType.create({ id: 17, name: "Vol", color: "6699ff" });
 console.log("🚧 Adding Teams ...");
 
 const ultimateTeam = await Team.create({
-  name: "Ultimate Team",
-  description: "La meilleure team du monde",
+  name: "Sacha",
+  description:
+    "Un jour je serais le meilleur dresseur. Je me battrais sans répits !",
   profile_id: profile.id,
 });
 const laTeamDeLenfer = await Team.create({
@@ -1617,6 +1618,12 @@ const laTeamDeLenfer = await Team.create({
 const squadFofolle = await Team.create({
   name: "Squad fofolle",
   description: "Pour tout gagner",
+  profile_id: profile2.id,
+});
+const teamRocket = await Team.create({
+  name: "Team Rocket",
+  description:
+    "La Team Rocket, plus rapide que la lumière.Rendez-vous tous ou ce sera la guerre ! Miaouss, oui la guerre !",
   profile_id: profile2.id,
 });
 
@@ -1781,7 +1788,7 @@ await PokemonTeam.bulkCreate([
   { pokemon_id: 6, team_id: 1 },
   { pokemon_id: 9, team_id: 1 },
   { pokemon_id: 12, team_id: 1 },
-  { pokemon_id: 15, team_id: 1 },
+  { pokemon_id: 25, team_id: 1 },
   { pokemon_id: 34, team_id: 1 },
   { pokemon_id: 6, team_id: 2 },
   { pokemon_id: 38, team_id: 2 },
@@ -1795,6 +1802,12 @@ await PokemonTeam.bulkCreate([
   { pokemon_id: 146, team_id: 3 },
   { pokemon_id: 145, team_id: 3 },
   { pokemon_id: 144, team_id: 3 },
+  { pokemon_id: 24, team_id: 4 },
+  { pokemon_id: 71, team_id: 4 },
+  { pokemon_id: 89, team_id: 4 },
+  { pokemon_id: 110, team_id: 4 },
+  { pokemon_id: 108, team_id: 4 },
+  { pokemon_id: 52, team_id: 4 },
 ]);
 
 console.log("🚧 Adding Votes to Pokemons ...");

@@ -4,7 +4,7 @@
 
 <a
   {href}
-  class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition h-fit"
+  class="hidden sm:inline-block w-full sm:w-auto text-center bg-white text-red-500 font-semibold px-4 py-2 rounded-lg hover:bg-red-100 transition"
 >
   ← Retour
 </a>
