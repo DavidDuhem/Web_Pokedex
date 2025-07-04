@@ -7,4 +7,7 @@ export const token = writable(currentToken);
 const initial = isTokenValid(currentToken);
 export const isLoggedIn = writable(initial);
 
-export const profileId = writable(null);
+const currentProfileId = parseInt(getCookie("profileId"), 10);
+export const profileId = writable(
+  !isNaN(currentProfileId) ? currentProfileId : null
+);

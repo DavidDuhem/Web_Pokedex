@@ -3,7 +3,7 @@
   import TeamTable from "$lib/components/teams/TeamTable.svelte";
   import TeamForm from "$lib/components/teams/TeamForm.svelte";
   import { errorHandler } from "$lib/../utils/errorHandler";
-  import { isLoggedIn } from "$lib/../stores/auth";
+  import { isLoggedIn, profileId } from "$lib/../stores/auth";
 
   /** @type {{ data: import('./$types').PageData }} */
   export let data;
@@ -52,8 +52,12 @@
 
   async function handleSubmit(event) {
     event.preventDefault();
+    console.log({ profile_id: $profileId, parsed: parseInt($profileId) });
     await errorHandler(async () => {
-      const newTeam = await service.create({ name, description }, fetch);
+      const newTeam = await service.create(
+        { name, description, profile_id: parseInt($profileId) },
+        fetch
+      );
 
       teams = [...teams, newTeam];
       name = "";
@@ -75,7 +79,7 @@
     await errorHandler(async () => {
       const updatedTeam = await service.update(
         id,
-        { name: editName, description: editDescription },
+        { name: editName, description: editDescription, profileId: $profileId },
         fetch
       );
       teams = teams.map((t) => (t.id === id ? updatedTeam : t));

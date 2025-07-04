@@ -1,7 +1,6 @@
 <script>
   import { isLoggedIn, profileId } from "$lib/../stores/auth.js";
   import DeleteButton from "$lib/components/basics/DeleteButton.svelte";
-  import { getCookie } from "$lib/../utils/tokenValidation.js";
 
   export let teams = [];
   export let editingId;

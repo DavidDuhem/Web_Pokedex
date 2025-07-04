@@ -1,6 +1,6 @@
 import BaseService from "./BaseService";
-import { token } from "../stores/auth.js";
-import { profileId, isLoggedIn } from "$lib/../stores/auth.js";
+import { get } from "svelte/store";
+import { profileId, isLoggedIn, token } from "$lib/../stores/auth.js";
 
 export default class AuthService extends BaseService {
   constructor(baseUrl) {
