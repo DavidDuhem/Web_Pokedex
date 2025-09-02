@@ -9,5 +9,5 @@ export const isLoggedIn = writable(initial);
 
 const currentProfileId = parseInt(getCookie("profileId"), 10);
 export const profileId = writable(
-  !isNaN(currentProfileId) ? currentProfileId : null
+    !isNaN(currentProfileId) ? currentProfileId : null
 );

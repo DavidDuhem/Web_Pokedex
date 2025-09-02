@@ -79,7 +79,7 @@
     await errorHandler(async () => {
       const updatedTeam = await service.update(
         id,
-        { name: editName, description: editDescription, profileId: $profileId },
+        { name: editName, description: editDescription, profile_id: $profileId },
         fetch
       );
       teams = teams.map((t) => (t.id === id ? updatedTeam : t));
