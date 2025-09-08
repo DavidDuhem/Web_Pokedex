@@ -9,9 +9,9 @@ The features include : Authentification, API calls to fetch, create, update and 
 
 ## Demo
 
-Here is a demo of the features :
+You can access a demo here, the API and Database might take around 10 secondes to wake up:
 
-[Regarder la démo](https://www.youtube.com/watch?v=LwrnSHN2m8o)
+[Access the demo](https://web-pokedex-chi.vercel.app/)
 
 
 ## Overview
