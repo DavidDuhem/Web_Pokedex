@@ -4,7 +4,7 @@
   >
     <p class="text-sm">David Duhem - Mon Pokédex</p>
     <nav class="flex gap-6 text-sm">
-      <a href="http://david-duhem.ovh/dev" class="hover:underline"
+      <a href="http://david-duhem.ovh/" class="hover:underline"
         >Mon portfolio</a
       >
     </nav>
