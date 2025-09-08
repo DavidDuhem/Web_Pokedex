@@ -1,34 +1,35 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "db:create": "node src/migrations/createTables.js",
-    "db:seed": "node src/migrations/populateTables.js",
-    "db:reset": "npm run db:create && npm run db:seed"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "API Server for pokedex app",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.6.0",
-    "express": "^5.1.0",
-    "joi": "^17.13.3",
-    "jsonwebtoken": "^9.0.2",
-    "pg": "^8.16.2",
-    "pg-hstore": "^2.3.4",
-    "sanitize-html": "^2.17.0",
-    "sequelize": "^6.37.7"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10",
-    "prettier-plugin-svelte": "^3.4.0",
-    "prettier-plugin-tailwindcss": "^0.6.13"
-  }
+    "name": "api",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js",
+        "db:create": "node src/migrations/createTables.js",
+        "db:seed": "node src/migrations/populateTables.js",
+        "db:reset": "npm run db:create && npm run db:seed"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "API Server for pokedex app",
+    "dependencies": {
+        "bcrypt": "^6.0.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.6.0",
+        "express": "^5.1.0",
+        "joi": "^17.13.3",
+        "jsonwebtoken": "^9.0.2",
+        "pg": "^8.16.2",
+        "pg-hstore": "^2.3.4",
+        "sanitize-html": "^2.17.0",
+        "sequelize": "^6.37.7",
+        "swagger-ui-express": "^5.0.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.10",
+        "prettier-plugin-svelte": "^3.4.0",
+        "prettier-plugin-tailwindcss": "^0.6.13"
+    }
 }
